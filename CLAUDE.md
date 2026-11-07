@@ -16,8 +16,8 @@ português, de forma simples, e mostre capturas de tela do resultado.
   Results, Courses, Contact, Footer)
 - `lib/site.ts` — dados editáveis: SITE_URL, WhatsApp, Instagram,
   procedimentos e galeria de resultados
-- `public/images/` — logo oficial (versão horizontal), foto da Thaise e fotos
-  de resultados (WebP)
+- `public/images/` — monograma "TS" da logo oficial (cabeçalho e rodapé),
+  foto da Thaise e fotos de resultados (WebP)
 - `app/icon.png` e `app/apple-icon.png` — ícones feitos do monograma "TS" da logo
 - `public/_headers` — cabeçalhos de segurança e cache lidos pela Cloudflare Pages
 

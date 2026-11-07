@@ -68,7 +68,7 @@ a {
 .brand img {
   display: block;
   width: auto;
-  height: 64px;
+  height: 72px;
 }
 .header nav {
   display: flex;
@@ -656,7 +656,7 @@ footer > span:nth-child(2) {
     padding: 8px 5%;
   }
   .brand img {
-    height: 46px;
+    height: 56px;
   }
   .header-cta {
     padding: 11px;
