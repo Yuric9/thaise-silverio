@@ -61,7 +61,8 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 10px 5.5%;
-  background: #fff;
+  background: var(--primary-darkest);
+  border-top: 1px solid rgba(233, 199, 125, 0.15);
   position: relative;
   z-index: 5;
 }
@@ -74,15 +75,23 @@ a {
   display: flex;
   gap: 30px;
   font-size: 12px;
-  color: var(--ink-soft);
+  color: var(--on-dark-muted);
 }
 .header nav a:hover {
-  color: var(--rose);
+  color: var(--gold);
 }
 .header-cta {
-  border: 1px solid #d8bd83;
+  border: 1px solid var(--gold);
+  color: var(--gold);
   padding: 14px 18px;
   font-size: 11px;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.header-cta:hover {
+  background: var(--gold);
+  color: var(--primary-darkest);
 }
 .header-cta span,
 .button span {
