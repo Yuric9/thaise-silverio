@@ -4,7 +4,13 @@ export default function Footer() {
   return (
     <footer>
       <a href="#inicio" className="footer-brand">
-        THAISE <em>SILVÉRIO</em>
+        <img
+          src="/images/logo-monograma.webp"
+          alt="Thaise Silvério — voltar ao início"
+          width={140}
+          height={144}
+          loading="lazy"
+        />
       </a>
       <span>MICROPIGMENTAÇÃO E ESTÉTICA</span>
       <span>
