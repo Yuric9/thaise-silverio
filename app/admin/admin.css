@@ -2223,6 +2223,8 @@ fieldset {
 }
 
 .quick-tile {
+  min-width: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2239,8 +2241,18 @@ fieldset {
 }
 
 .quick-tile strong {
-  font-size: var(--text-md);
+  max-width: 100%;
+  font-size: var(--text-sm);
   line-height: 1.2;
+  /* Nomes longos ("Micropigmentação de sobrancelhas") quebram dentro do botão. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+@media (min-width: 720px) {
+  .quick-tile strong {
+    font-size: var(--text-md);
+  }
 }
 
 .quick-tile span {
