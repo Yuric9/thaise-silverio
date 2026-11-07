@@ -2,6 +2,23 @@
 
 Site institucional independente desenvolvido com Next.js, React e TypeScript.
 
+## Publicação na Cloudflare Pages
+
+O projeto está configurado para exportação estática do Next.js. A cada build, o Next.js gera a pasta `out`, que contém os arquivos prontos para publicação.
+
+No painel da Cloudflare:
+
+1. Acesse **Workers & Pages** e crie um projeto Pages conectado ao GitHub.
+2. Selecione o repositório `Yuric9/thaise-silverio` e a branch `main`.
+3. Configure:
+   - Framework preset: **Next.js (Static HTML Export)**, se disponível.
+   - Build command: `npm run build`.
+   - Build output directory: `out`.
+   - Root directory: `/` (raiz do repositório).
+4. Salve e inicie a implantação.
+
+O projeto usa exportação estática; recursos que exigem servidor Next.js não estão habilitados nesta configuração.
+
 ## Executar localmente
 
 Requer Node.js 20 ou superior.
@@ -13,7 +30,16 @@ npm run dev
 
 Acesse http://localhost:3000.
 
+Para gerar a versão estática localmente:
+
+```bash
+npm run build
+```
+
+O resultado será salvo em `out/`.
+
 ## Antes de publicar
+
 - Configure o número real do WhatsApp em `app/page.tsx` (o número atual é apenas um placeholder).
 - Adicione fotografias próprias e autorizadas.
 - Confirme biografia, endereço, redes sociais e textos dos procedimentos.
