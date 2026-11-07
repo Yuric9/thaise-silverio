@@ -1,4 +1,5 @@
 const highlights = [
+  { value: "+500", label: "clientes atendidas" },
   { value: "6 anos", label: "de especialização em micropigmentação" },
   { value: "Esteticista", label: "e cosmetóloga" },
   { value: "Cursos", label: "para formar novas profissionais" },
@@ -16,7 +17,8 @@ export default function About() {
         <div className="bio">
           <p>
             Olá, sou <strong>Thaise Silvério</strong>, esteticista e
-            cosmetóloga, especialista em micropigmentação há 6 anos.
+            cosmetóloga, especialista em micropigmentação há 6 anos e com mais
+            de 500 clientes atendidas.
           </p>
           <p>
             Cada atendimento começa com uma escuta atenta: entender o que você
