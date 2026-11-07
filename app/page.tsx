@@ -9,15 +9,17 @@ import Services from "@/components/Services";
 
 export default function Home() {
   return (
-    <main>
+    <>
       <Header />
-      <Hero />
-      <About />
-      <Services />
-      <Results />
-      <Courses />
-      <Contact />
+      <main>
+        <Hero />
+        <About />
+        <Services />
+        <Results />
+        <Courses />
+        <Contact />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

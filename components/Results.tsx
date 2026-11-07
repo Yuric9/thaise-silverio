@@ -18,7 +18,6 @@ export default function Results() {
       <div className="results-grid">
         {results.map((r) => (
           <figure className="result-card" key={r.src}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={r.src}
               alt={r.alt}

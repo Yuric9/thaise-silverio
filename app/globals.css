@@ -19,6 +19,18 @@
 * {
   box-sizing: border-box;
 }
+/* Texto lido só por leitores de tela (invisível na tela) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -40,7 +52,7 @@ a {
   justify-content: space-between;
   align-items: center;
   padding: 0 5.5%;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 2px;
 }
 .header {
@@ -179,7 +191,7 @@ a {
   align-items: center;
   gap: 12px;
   margin-top: 75px;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 1.5px;
   color: var(--on-dark);
 }
@@ -192,10 +204,6 @@ a {
   place-items: center;
   color: var(--gold);
   font: 17px Georgia;
-}
-.hero-note b {
-  margin-left: 35px;
-  color: var(--gold);
 }
 .hero-art {
   position: relative;
@@ -245,7 +253,7 @@ a {
   position: absolute;
   z-index: 2;
   bottom: 35px;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 3px;
   color: #f2dcae;
 }
@@ -254,7 +262,7 @@ a {
   right: 0;
   top: 50%;
   writing-mode: vertical-rl;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 3px;
   color: #d8c18d;
 }
@@ -266,7 +274,7 @@ a {
   display: flex;
   justify-content: space-between;
   color: var(--on-dark-muted);
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 2px;
 }
 .section {
@@ -280,7 +288,7 @@ a {
   background: #fff;
 }
 .section-label {
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 2px;
   color: var(--rose);
   padding-top: 10px;
@@ -303,13 +311,49 @@ a {
   color: var(--rose);
 }
 .intro-aside {
-  padding-top: 48px;
+  padding-top: 120px;
 }
 .intro-aside p,
 .section-heading > p,
 .contact-side p {
   font-size: 13px;
   line-height: 1.9;
+  color: var(--muted);
+}
+.bio p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin: 0 0 16px;
+}
+.bio strong {
+  color: var(--primary-deep);
+  font-weight: 600;
+}
+.bio-signature {
+  font:
+    italic 26px Georgia,
+    serif;
+  color: var(--rose) !important;
+  margin-top: 24px !important;
+}
+.highlights {
+  margin: 0 0 20px;
+}
+.highlights div {
+  border-top: 1px solid #eee5d4;
+  padding: 18px 0;
+}
+.highlights dt {
+  font:
+    30px Georgia,
+    serif;
+  color: var(--primary-deep);
+}
+.highlights dd {
+  margin: 4px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.5px;
   color: var(--muted);
 }
 .intro-aside .text-link {
@@ -363,7 +407,7 @@ a {
   border: 1px solid #eee5d4;
   padding: 5px 9px;
   color: #8a7a5c;
-  font-size: 9px;
+  font-size: 10px;
 }
 .service-symbol {
   font: 30px Georgia;
@@ -454,7 +498,7 @@ a {
   display: block;
   margin-top: 12px;
   color: #999;
-  font-size: 9px;
+  font-size: 10px;
 }
 footer {
   background: var(--primary-darkest);
@@ -464,7 +508,7 @@ footer {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1px;
 }
 footer .footer-brand {
@@ -590,8 +634,21 @@ footer > span:nth-child(2) {
   }
 }
 @media (max-width: 620px) {
+  .topline,
+  .eyebrow,
+  .section-label,
+  .hero-note,
+  .hero-bottom,
+  .art-caption,
+  .art-side,
+  .service-tag,
+  .result-tag,
+  .contact-side small,
+  footer {
+    font-size: 11px;
+  }
   .topline {
-    font-size: 7px;
+    font-size: 10px;
     padding: 0 4%;
     letter-spacing: 1px;
   }
@@ -607,7 +664,7 @@ footer > span:nth-child(2) {
   }
   .header-cta {
     padding: 11px;
-    font-size: 9px;
+    font-size: 10px;
   }
   .header nav {
     gap: 14px;
@@ -632,13 +689,13 @@ footer > span:nth-child(2) {
     margin-top: 45px;
   }
   .hero-bottom {
-    font-size: 7px;
+    font-size: 10px;
   }
   .intro {
     display: block;
   }
   .intro-aside {
-    padding-top: 5px;
+    padding-top: 20px;
   }
   .section {
     padding: 65px 7%;

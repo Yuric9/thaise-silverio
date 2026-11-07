@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
     <section className="hero" id="inicio">
-      <div className="hero-bg" />
+      <div className="hero-bg" aria-hidden="true" />
       <div className="hero-copy">
         <p className="eyebrow">
           <i /> MICROPIGMENTAÇÃO & ESTÉTICA
@@ -17,31 +17,32 @@ export default function Hero() {
         </p>
         <div className="hero-actions">
           <a className="button button-gold" href="#procedimentos">
-            Conheça os procedimentos <span>↗</span>
+            Conheça os procedimentos <span aria-hidden="true">↗</span>
           </a>
           <a className="text-link" href="#sobre">
-            Conheça a Thaise <span>→</span>
+            Conheça a Thaise <span aria-hidden="true">→</span>
           </a>
         </div>
         <div className="hero-note">
-          <span className="seal">TS</span>
+          <span className="seal" aria-hidden="true">
+            TS
+          </span>
           <span>
             BELEZA COM
             <br />
             IDENTIDADE
           </span>
-          <b>01 / 06</b>
         </div>
       </div>
       <div className="hero-art">
         <div className="art-frame">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="art-photo"
             src="/images/thaise-silverio.webp"
             alt="Thaise Silvério sorrindo, sentada em uma cadeira, de blazer e calça brancos"
             width={900}
             height={1200}
+            fetchPriority="high"
           />
           <div className="art-caption">SUA ESSÊNCIA, EM DESTAQUE</div>
         </div>

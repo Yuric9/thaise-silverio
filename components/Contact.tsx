@@ -1,4 +1,9 @@
-import { INSTAGRAM_HANDLE, INSTAGRAM_URL, WHATSAPP_URL } from "@/lib/site";
+import {
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
+  WHATSAPP_DISPLAY,
+  WHATSAPP_URL,
+} from "@/lib/site";
 
 export default function Contact() {
   return (
@@ -23,7 +28,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Falar pelo WhatsApp <span>↗</span>
+            Falar pelo WhatsApp <span aria-hidden="true">↗</span>
           </a>
           <a
             className="button button-line"
@@ -31,10 +36,12 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Instagram <span>↗</span>
+            Instagram <span aria-hidden="true">↗</span>
           </a>
         </div>
-        <small>WhatsApp (62) 8123-1427 · @{INSTAGRAM_HANDLE}</small>
+        <small>
+          WhatsApp {WHATSAPP_DISPLAY} · @{INSTAGRAM_HANDLE}
+        </small>
       </div>
     </section>
   );

@@ -1,0 +1,10 @@
+# Cabeçalhos de segurança aplicados pela Cloudflare Pages a todas as páginas
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Imagens mudam pouco: deixa o navegador guardar por 30 dias
+/images/*
+  Cache-Control: public, max-age=2592000
