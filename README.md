@@ -7,7 +7,7 @@ Site institucional independente desenvolvido com Next.js 16, React 19 e TypeScri
 ```
 app/          layout, página principal e estilos globais
 components/   seções da página (Header, Hero, About, Services, Courses, Contact, Footer)
-lib/site.ts   dados editáveis: número do WhatsApp e lista de procedimentos
+lib/site.ts   dados editáveis: endereço do site, WhatsApp, Instagram, procedimentos e galeria
 public/       imagens e logo
 ```
 
@@ -56,7 +56,7 @@ npm run format
 
 ## Antes de publicar
 
-- Adicione fotografias próprias e autorizadas.
+- Ao usar domínio próprio, atualize `SITE_URL` em `lib/site.ts` (usado na prévia de compartilhamento).
 - Confirme biografia, endereço, redes sociais e textos dos procedimentos.
 
 O site de referência foi utilizado somente como inspiração de estrutura e experiência. Marca, textos e conteúdo visual foram preparados para Thaise Silvério.
