@@ -1,8 +1,11 @@
 # Thaise Silvério — Micropigmentação e Estética
 
-Site institucional de uma profissional de micropigmentação e estética. Ele apresenta
-os procedimentos, mostra resultados reais de antes e depois e leva a cliente direto
-para uma conversa no WhatsApp, já com a mensagem pronta.
+Site e sistema de gestão de uma profissional de micropigmentação e estética.
+
+- **Site público:** apresenta os procedimentos, mostra resultados reais de antes e
+  depois e leva a cliente direto para uma conversa no WhatsApp, com a mensagem pronta.
+- **Painel (`/admin`):** agenda, caixa, relatórios, clientes, remarketing e produtos,
+  além da edição do conteúdo do site sem mexer em código.
 
 🔗 **Site no ar:** https://thaise-silverio.pages.dev
 
@@ -22,123 +25,149 @@ precisar explicar o que quer.
 
 ## Funcionalidades
 
+### Site público
+
 - **Página única** com as seções Início, Sobre, Procedimentos, Resultados, Cursos e Contato.
 - **Agendamento pelo WhatsApp** com mensagem pronta para cada procedimento e para os cursos.
 - **Galeria "Antes & depois"** com fotos reais, autorizadas pelas clientes.
 - **Biografia** da profissional, com destaques (+500 clientes, 6 anos de experiência).
 - **Layout responsivo**: 3, 2 ou 1 coluna conforme o tamanho da tela.
-- **Prévia de compartilhamento**: o link mostra um card com foto quando é enviado no
-  WhatsApp, no Instagram ou no Facebook (Open Graph).
-- **Favicon** e ícone para a tela inicial do celular.
+- **Prévia de compartilhamento** (Open Graph), favicon e ícone para a tela inicial.
+- **Sempre no ar:** se o banco de dados falhar, o site mostra o conteúdo padrão.
+
+### Painel de gestão (`/admin`)
+
+Baseado no sistema da Yuri Barbershop, adaptado para uma profissional que atende sozinha.
+
+| Tela              | O que faz                                                                                                                                      |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Início**        | Faturamento do dia, da semana e do mês, lançamento rápido de atendimentos e lançamentos de hoje.                                               |
+| **Agenda**        | Agendamentos por dia, horários livres calculados pelo servidor, confirmar, finalizar (com pagamento) e cancelar.                               |
+| **Caixa**         | Entradas e saídas, atendimento avulso e despesas fixas do mês.                                                                                 |
+| **Relatórios**    | Resultado mensal e anual, por forma de pagamento e por procedimento.                                                                           |
+| **Clientes**      | Ficha da cliente, histórico, cartão fidelidade e importação de contatos.                                                                       |
+| **Remarketing**   | Listas prontas com mensagem no WhatsApp: pós-atendimento, **retoque**, **manutenção anual**, retorno, aniversariantes, fidelidade e indicação. |
+| **Procedimentos** | Preço, duração e dias até o retoque (agenda) e descrição, etiqueta e ordem (cards do site).                                                    |
+| **Produtos**      | Estoque, fotos e venda no balcão.                                                                                                              |
+| **Site**          | Textos e biografia, galeria (envio de fotos), destaques e contatos (WhatsApp e Instagram).                                                     |
+| **Configurações** | Horário de atendimento por dia da semana.                                                                                                      |
 
 ![Seção de resultados](docs/screenshots/resultados.webp)
 
 ## Tecnologias
 
-| Área       | Tecnologia                                                             |
-| ---------- | ---------------------------------------------------------------------- |
-| Framework  | [Next.js 16](https://nextjs.org/) (App Router) com exportação estática |
-| Interface  | React 19 + TypeScript                                                  |
-| Estilo     | CSS puro, com variáveis para a paleta de cores                         |
-| Formatação | Prettier                                                               |
-| Hospedagem | Cloudflare Pages (deploy automático a cada merge na `main`)            |
+| Área           | Tecnologia                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| Framework      | [Next.js 16](https://nextjs.org/) (App Router) com [vinext](https://github.com/cloudflare/vinext) |
+| Interface      | React 19 + TypeScript                                                                             |
+| Servidor       | Cloudflare Worker                                                                                 |
+| Banco de dados | Cloudflare D1 (SQLite) com Drizzle ORM e migrações em `drizzle/`                                  |
+| Fotos          | Cloudflare R2                                                                                     |
+| Validação      | Zod                                                                                               |
+| Estilo         | CSS puro, com variáveis para a paleta (site e painel em arquivos separados)                       |
 
 ## Decisões técnicas
 
-- **Site estático (`output: "export"`).** Um site de apresentação não precisa de
-  servidor. O build gera HTML puro na pasta `out/`, então a hospedagem é gratuita e
-  rápida, e não sobra servidor para manter nem para ser atacado.
-- **Conteúdo separado do visual.** Número do WhatsApp, Instagram, procedimentos e
-  galeria ficam em `lib/site.ts`. Para trocar um texto ou uma foto não é preciso
-  mexer nos componentes, e cada informação existe em um lugar só.
-- **Paleta em variáveis CSS.** As cores ficam no `:root` de `app/globals.css`. A
-  troca da paleta azul pela rosé foi feita mudando só esses valores.
-- **Imagens otimizadas.** As fotos foram convertidas para WebP (de até 417 KB para 30 a
-  90 KB), tiveram os metadados removidos (como a localização GPS) e receberam texto
-  alternativo descritivo.
+- **Um projeto só para site e painel.** O painel edita o mesmo banco que o site lê,
+  então uma mudança salva no painel aparece no site na hora.
+- **Site que nunca cai.** A página pública busca o conteúdo no banco; se o banco
+  estiver indisponível, ela mostra o conteúdo padrão (`lib/site-content.ts`).
+- **Reaproveitamento.** Login, agenda, caixa, clientes e relatórios vêm do sistema
+  da Yuri Barbershop, sem a parte de equipe e comissões.
+- **Agenda sem conflito.** Cada agendamento reserva faixas de 30 minutos numa tabela
+  com índice único: dois atendimentos nunca ocupam o mesmo horário, mesmo se forem
+  marcados ao mesmo tempo.
+- **Fotos tratadas no navegador.** Antes do envio, a foto é reduzida (até 1200 px),
+  convertida para WebP e redesenhada, o que apaga os metadados (como a localização GPS).
+- **Segurança.** Senha com PBKDF2, sessão em cookie `httpOnly`, limite de tentativas
+  de login, bloqueio de escritas vindas de outros sites, validação de tudo o que
+  chega à API e cabeçalhos de segurança em todas as respostas.
 - **Acessibilidade.** Tamanho mínimo de texto, enfeites ignorados por leitores de tela
-  (`aria-hidden`), links com nome completo ("Saiba mais sobre Hidralips") e HTML
-  semântico (`header`, `main`, `nav`, `footer`).
-- **Segurança.** Cabeçalhos HTTP em `public/_headers` (proteção contra clickjacking,
-  `nosniff`, `Referrer-Policy`, `Permissions-Policy`), dependências sem
-  vulnerabilidades conhecidas e nenhuma chave no código.
+  (`aria-hidden`), links com nome completo e HTML semântico.
 
 ## Estrutura
 
 ```
 app/
-  layout.tsx        metadados, SEO e prévia de compartilhamento
-  page.tsx          monta as seções na ordem
-  globals.css       estilos e paleta de cores
-  icon.png          favicon (monograma da logo)
-components/         uma seção por arquivo (Header, Hero, About, Services,
-                    Results, Courses, Contact, Footer)
-lib/site.ts         dados editáveis: endereço do site, WhatsApp, Instagram,
-                    procedimentos e galeria
-public/
-  images/           logo, foto da Thaise e fotos de resultados
-  og-image.jpg      imagem da prévia de compartilhamento
-  _headers          cabeçalhos de segurança e cache (Cloudflare Pages)
-docs/screenshots/   capturas usadas neste README
-CLAUDE.md           guia para agentes de IA que trabalham no projeto
+  (site)/           site público (página, layout e CSS do site)
+  admin/            painel: login ou painel, conforme a sessão (CSS próprio)
+  api/              rotas da API, uma pasta por recurso
+components/
+  site/             seções do site (Header, Hero, About, Services...)
+  admin/            telas do painel (sections/) e modais
+  ui/, auth/        componentes genéricos e tela de login
+lib/
+  site-content.ts   conteúdo padrão do site e tipos
+  domain/           regras puras: datas, agenda, retoque, dinheiro, finanças...
+  server/           código do servidor: sessão, senhas, validação, banco
+  client/           comunicação do painel com a API
+db/schema.ts        tabelas do banco (Drizzle)
+drizzle/            migrações SQL
+worker/index.ts     entrada do Worker (banco, fotos, segredos e cabeçalhos)
+tests/              testes de regras (*.test.ts) e do Worker (*.test.mjs)
 ```
 
 ## Como rodar localmente
 
-Requer **Node.js 20 ou superior** (o projeto usa o 22, definido em `.nvmrc`).
+Requer **Node.js 22.18 ou superior**.
 
-1. Clone o repositório:
+1. Instale as dependências:
    ```bash
-   git clone https://github.com/Yuric9/thaise-silverio.git
-   ```
-2. Entre na pasta e instale as dependências:
-   ```bash
-   cd thaise-silverio
    npm install
    ```
-3. Inicie o servidor de desenvolvimento:
+2. Gere o build e crie o banco local:
    ```bash
-   npm run dev
+   npm run build
    ```
-4. Acesse http://localhost:3000.
+   ```bash
+   npm run db:migrate:local
+   ```
+3. Crie o arquivo `dist/server/.dev.vars` com um login de teste. Gere o hash da senha
+   com `npm run admin:hash-password` e escreva:
+   ```
+   ADMIN_EMAIL=seu-email@exemplo.com
+   ADMIN_PASSWORD_HASH=pbkdf2-sha256$100000$...
+   ```
+4. Rode o Worker localmente:
+   ```bash
+   npx wrangler dev --config dist/server/wrangler.json --local
+   ```
+5. Acesse http://localhost:8787 (site) e http://localhost:8787/admin (painel).
 
-| Comando          | O que faz                                          |
-| ---------------- | -------------------------------------------------- |
-| `npm run dev`    | Servidor de desenvolvimento com recarga automática |
-| `npm run build`  | Gera a versão estática na pasta `out/`             |
-| `npm run format` | Formata o código com o Prettier                    |
-
-O projeto não usa variáveis de ambiente nem banco de dados.
+| Comando               | O que faz                                        |
+| --------------------- | ------------------------------------------------ |
+| `npm run build`       | Gera o Worker e os arquivos em `dist/`           |
+| `npm test`            | Testes de regras, build e testes do Worker       |
+| `npm run typecheck`   | Verifica os tipos do TypeScript                  |
+| `npm run db:generate` | Cria uma migração depois de mudar `db/schema.ts` |
+| `npm run format`      | Formata o código com o Prettier                  |
 
 ## Como editar o conteúdo
 
-| Quero mudar...      | Onde                                                                                            |
-| ------------------- | ----------------------------------------------------------------------------------------------- |
-| Número do WhatsApp  | `WHATSAPP_NUMBER` e `WHATSAPP_DISPLAY` em `lib/site.ts`                                         |
-| Instagram           | `INSTAGRAM_HANDLE` em `lib/site.ts`                                                             |
-| Procedimentos       | lista `services` em `lib/site.ts`                                                               |
-| Fotos de resultados | coloque o arquivo em `public/images/resultados/` e adicione na lista `results` em `lib/site.ts` |
-| Cores               | variáveis no início de `app/globals.css`                                                        |
-| Textos das seções   | arquivo da seção em `components/`                                                               |
+Pelo painel, em **/admin → Site** (textos, biografia, galeria, destaques e contatos) e
+**/admin → Procedimentos** (cards do site). Nos textos, `*palavras*` ficam em destaque
+rosé e `**palavras**` em negrito.
 
-## Deploy
+No código ficam só as cores (`app/(site)/site.css` e `app/admin/admin.css`) e o
+conteúdo padrão (`lib/site-content.ts`), usado enquanto nada foi salvo no painel.
 
-O site é publicado na **Cloudflare Pages**, conectada a este repositório. Cada merge
-na branch `main` gera um novo deploy automaticamente.
+## Publicação na Cloudflare
 
-Configuração do projeto na Cloudflare:
+O projeto roda como **Cloudflare Worker** com banco **D1** e fotos no **R2**.
+Primeira publicação:
 
-- **Framework preset:** Next.js (Static HTML Export)
-- **Build command:** `npm run build`
-- **Build output directory:** `out`
-- **Node.js:** lido do arquivo `.nvmrc` (22)
+1. Crie o banco D1 `thaise-silverio-db` e o bucket R2 `thaise-silverio-fotos`.
+2. Coloque o `database_id` do banco em `CLOUDFLARE_DATABASE_ID` (`vite.config.ts`).
+3. Gere o hash da senha da administradora (`npm run admin:hash-password`) e cadastre
+   os segredos do Worker `ADMIN_EMAIL` e `ADMIN_PASSWORD_HASH`.
+4. Publique com `npm run deploy` (build, migrações do banco e envio do Worker) ou
+   conecte o repositório em **Workers & Pages → Create → Workers → Import a repository**,
+   com build `npm run build` e deploy
+   `npx wrangler d1 migrations apply DB --remote --config dist/server/wrangler.json && npx wrangler deploy --config dist/server/wrangler.json`.
+5. Depois de conferir o novo endereço, atualize `SITE_URL` em `lib/site-content.ts`.
 
-**Voltar a uma versão anterior (rollback):** no painel da Cloudflare, abra o projeto,
-vá em **Deployments**, escolha uma publicação anterior e use
-**Rollback to this deployment**.
-
-Ao passar a usar um domínio próprio, atualize `SITE_URL` em `lib/site.ts`. Ele é
-usado na prévia de compartilhamento.
+**Voltar a uma versão anterior:** no painel da Cloudflare, abra o Worker, vá em
+**Deployments** e use **Rollback**.
 
 ## Próximos passos
 
