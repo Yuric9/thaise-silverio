@@ -1,6 +1,15 @@
 # Thaise Silvério — Micropigmentação e Estética
 
-Site institucional independente desenvolvido com Next.js, React e TypeScript.
+Site institucional independente desenvolvido com Next.js 16, React 19 e TypeScript.
+
+## Estrutura
+
+```
+app/          layout, página principal e estilos globais
+components/   seções da página (Header, Hero, About, Services, Courses, Contact, Footer)
+lib/site.ts   dados editáveis: número do WhatsApp e lista de procedimentos
+public/       imagens e logo
+```
 
 ## Publicação na Cloudflare Pages
 
@@ -38,9 +47,14 @@ npm run build
 
 O resultado será salvo em `out/`.
 
+Para formatar o código:
+
+```bash
+npm run format
+```
+
 ## Antes de publicar
 
-- Configure o número real do WhatsApp em `app/page.tsx` (o número atual é apenas um placeholder).
 - Adicione fotografias próprias e autorizadas.
 - Confirme biografia, endereço, redes sociais e textos dos procedimentos.
 
