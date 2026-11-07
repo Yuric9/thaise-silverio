@@ -1,62 +1,158 @@
 # Thaise Silvério — Micropigmentação e Estética
 
-Site institucional independente desenvolvido com Next.js 16, React 19 e TypeScript.
+Site institucional de uma profissional de micropigmentação e estética. Ele apresenta
+os procedimentos, mostra resultados reais de antes e depois e leva a cliente direto
+para uma conversa no WhatsApp, já com a mensagem pronta.
+
+🔗 **Site no ar:** https://thaise-silverio.pages.dev
+
+![Página inicial no computador](docs/screenshots/desktop.webp)
+
+<p align="center">
+  <img src="docs/screenshots/celular.webp" alt="Página inicial no celular" width="280">
+</p>
+
+## O problema que o site resolve
+
+Uma rede social mostra o trabalho, mas espalhado entre muitas publicações. O site
+reúne num endereço próprio tudo o que uma cliente precisa para decidir: quem é a profissional, quais procedimentos
+ela faz, resultados reais e um caminho curto até o agendamento. Cada botão
+"Saiba mais" abre o WhatsApp com o nome do procedimento escrito, para a cliente não
+precisar explicar o que quer.
+
+## Funcionalidades
+
+- **Página única** com as seções Início, Sobre, Procedimentos, Resultados, Cursos e Contato.
+- **Agendamento pelo WhatsApp** com mensagem pronta para cada procedimento e para os cursos.
+- **Galeria "Antes & depois"** com fotos reais, autorizadas pelas clientes.
+- **Biografia** da profissional, com destaques (+500 clientes, 6 anos de experiência).
+- **Layout responsivo**: 3, 2 ou 1 coluna conforme o tamanho da tela.
+- **Prévia de compartilhamento**: o link mostra um card com foto quando é enviado no
+  WhatsApp, no Instagram ou no Facebook (Open Graph).
+- **Favicon** e ícone para a tela inicial do celular.
+
+![Seção de resultados](docs/screenshots/resultados.webp)
+
+## Tecnologias
+
+| Área       | Tecnologia                                                             |
+| ---------- | ---------------------------------------------------------------------- |
+| Framework  | [Next.js 16](https://nextjs.org/) (App Router) com exportação estática |
+| Interface  | React 19 + TypeScript                                                  |
+| Estilo     | CSS puro, com variáveis para a paleta de cores                         |
+| Formatação | Prettier                                                               |
+| Hospedagem | Cloudflare Pages (deploy automático a cada merge na `main`)            |
+
+## Decisões técnicas
+
+- **Site estático (`output: "export"`).** Um site de apresentação não precisa de
+  servidor. O build gera HTML puro na pasta `out/`, então a hospedagem é gratuita e
+  rápida, e não sobra servidor para manter nem para ser atacado.
+- **Conteúdo separado do visual.** Número do WhatsApp, Instagram, procedimentos e
+  galeria ficam em `lib/site.ts`. Para trocar um texto ou uma foto não é preciso
+  mexer nos componentes, e cada informação existe em um lugar só.
+- **Paleta em variáveis CSS.** As cores ficam no `:root` de `app/globals.css`. A
+  troca da paleta azul pela rosé foi feita mudando só esses valores.
+- **Imagens otimizadas.** As fotos foram convertidas para WebP (de até 417 KB para 30 a
+  90 KB), tiveram os metadados removidos (como a localização GPS) e receberam texto
+  alternativo descritivo.
+- **Acessibilidade.** Tamanho mínimo de texto, enfeites ignorados por leitores de tela
+  (`aria-hidden`), links com nome completo ("Saiba mais sobre Hidralips") e HTML
+  semântico (`header`, `main`, `nav`, `footer`).
+- **Segurança.** Cabeçalhos HTTP em `public/_headers` (proteção contra clickjacking,
+  `nosniff`, `Referrer-Policy`, `Permissions-Policy`), dependências sem
+  vulnerabilidades conhecidas e nenhuma chave no código.
 
 ## Estrutura
 
 ```
-app/          layout, página principal e estilos globais
-components/   seções da página (Header, Hero, About, Services, Courses, Contact, Footer)
-lib/site.ts   dados editáveis: endereço do site, WhatsApp, Instagram, procedimentos e galeria
-public/       imagens e logo
+app/
+  layout.tsx        metadados, SEO e prévia de compartilhamento
+  page.tsx          monta as seções na ordem
+  globals.css       estilos e paleta de cores
+  icon.svg          favicon
+components/         uma seção por arquivo (Header, Hero, About, Services,
+                    Results, Courses, Contact, Footer)
+lib/site.ts         dados editáveis: endereço do site, WhatsApp, Instagram,
+                    procedimentos e galeria
+public/
+  images/           logo, foto da Thaise e fotos de resultados
+  og-image.jpg      imagem da prévia de compartilhamento
+  _headers          cabeçalhos de segurança e cache (Cloudflare Pages)
+docs/screenshots/   capturas usadas neste README
+CLAUDE.md           guia para agentes de IA que trabalham no projeto
 ```
 
-## Publicação na Cloudflare Pages
+## Como rodar localmente
 
-O projeto está configurado para exportação estática do Next.js. A cada build, o Next.js gera a pasta `out`, que contém os arquivos prontos para publicação.
+Requer **Node.js 20 ou superior** (o projeto usa o 22, definido em `.nvmrc`).
 
-No painel da Cloudflare:
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Yuric9/thaise-silverio.git
+   ```
+2. Entre na pasta e instale as dependências:
+   ```bash
+   cd thaise-silverio
+   npm install
+   ```
+3. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+4. Acesse http://localhost:3000.
 
-1. Acesse **Workers & Pages** e crie um projeto Pages conectado ao GitHub.
-2. Selecione o repositório `Yuric9/thaise-silverio` e a branch `main`.
-3. Configure:
-   - Framework preset: **Next.js (Static HTML Export)**, se disponível.
-   - Build command: `npm run build`.
-   - Build output directory: `out`.
-   - Root directory: `/` (raiz do repositório).
-   - A versão do Node.js (22) é lida automaticamente do arquivo `.nvmrc`.
-4. Salve e inicie a implantação.
+| Comando          | O que faz                                          |
+| ---------------- | -------------------------------------------------- |
+| `npm run dev`    | Servidor de desenvolvimento com recarga automática |
+| `npm run build`  | Gera a versão estática na pasta `out/`             |
+| `npm run format` | Formata o código com o Prettier                    |
 
-O projeto usa exportação estática; recursos que exigem servidor Next.js não estão habilitados nesta configuração.
+O projeto não usa variáveis de ambiente nem banco de dados.
 
-## Executar localmente
+## Como editar o conteúdo
 
-Requer Node.js 20 ou superior.
+| Quero mudar...      | Onde                                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| Número do WhatsApp  | `WHATSAPP_NUMBER` e `WHATSAPP_DISPLAY` em `lib/site.ts`                                         |
+| Instagram           | `INSTAGRAM_HANDLE` em `lib/site.ts`                                                             |
+| Procedimentos       | lista `services` em `lib/site.ts`                                                               |
+| Fotos de resultados | coloque o arquivo em `public/images/resultados/` e adicione na lista `results` em `lib/site.ts` |
+| Cores               | variáveis no início de `app/globals.css`                                                        |
+| Textos das seções   | arquivo da seção em `components/`                                                               |
 
-```bash
-npm install
-npm run dev
-```
+## Deploy
 
-Acesse http://localhost:3000.
+O site é publicado na **Cloudflare Pages**, conectada a este repositório. Cada merge
+na branch `main` gera um novo deploy automaticamente.
 
-Para gerar a versão estática localmente:
+Configuração do projeto na Cloudflare:
 
-```bash
-npm run build
-```
+- **Framework preset:** Next.js (Static HTML Export)
+- **Build command:** `npm run build`
+- **Build output directory:** `out`
+- **Node.js:** lido do arquivo `.nvmrc` (22)
 
-O resultado será salvo em `out/`.
+**Voltar a uma versão anterior (rollback):** no painel da Cloudflare, abra o projeto,
+vá em **Deployments**, escolha uma publicação anterior e use
+**Rollback to this deployment**.
 
-Para formatar o código:
+Ao passar a usar um domínio próprio, atualize `SITE_URL` em `lib/site.ts`. Ele é
+usado na prévia de compartilhamento.
 
-```bash
-npm run format
-```
+## Próximos passos
 
-## Antes de publicar
+- Cidade e endereço de atendimento (melhora a busca local no Google).
+- Técnicas de micropigmentação que a profissional domina.
+- Perguntas frequentes ("Dói?", "Quanto tempo dura?", "Quais os cuidados depois?").
+- Menu recolhível (hambúrguer) no celular.
+- Domínio próprio.
+- Depoimentos de clientes.
 
-- Ao usar domínio próprio, atualize `SITE_URL` em `lib/site.ts` (usado na prévia de compartilhamento).
-- Confirme biografia, endereço, redes sociais e textos dos procedimentos.
+## Autor
 
-O site de referência foi utilizado somente como inspiração de estrutura e experiência. Marca, textos e conteúdo visual foram preparados para Thaise Silvério.
+Desenvolvido por [Yuric9](https://github.com/Yuric9), com apoio de IA (Claude Code).
+
+Conteúdo, fotos e marca pertencem a Thaise Silvério. O site de referência foi usado
+somente como inspiração de estrutura e experiência. Marca, textos e conteúdo visual
+foram preparados para Thaise Silvério.
