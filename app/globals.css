@@ -303,13 +303,49 @@ a {
   color: var(--rose);
 }
 .intro-aside {
-  padding-top: 48px;
+  padding-top: 120px;
 }
 .intro-aside p,
 .section-heading > p,
 .contact-side p {
   font-size: 13px;
   line-height: 1.9;
+  color: var(--muted);
+}
+.bio p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin: 0 0 16px;
+}
+.bio strong {
+  color: var(--primary-deep);
+  font-weight: 600;
+}
+.bio-signature {
+  font:
+    italic 26px Georgia,
+    serif;
+  color: var(--rose) !important;
+  margin-top: 24px !important;
+}
+.highlights {
+  margin: 0 0 20px;
+}
+.highlights div {
+  border-top: 1px solid #eee5d4;
+  padding: 18px 0;
+}
+.highlights dt {
+  font:
+    30px Georgia,
+    serif;
+  color: var(--primary-deep);
+}
+.highlights dd {
+  margin: 4px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.5px;
   color: var(--muted);
 }
 .intro-aside .text-link {
@@ -638,7 +674,7 @@ footer > span:nth-child(2) {
     display: block;
   }
   .intro-aside {
-    padding-top: 5px;
+    padding-top: 20px;
   }
   .section {
     padding: 65px 7%;
