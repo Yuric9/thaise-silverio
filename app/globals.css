@@ -66,9 +66,9 @@ a {
   z-index: 5;
 }
 .brand img {
-  width: 150px;
-  height: 76px;
-  object-fit: contain;
+  display: block;
+  width: auto;
+  height: 64px;
 }
 .header nav {
   display: flex;
@@ -659,8 +659,7 @@ footer > span:nth-child(2) {
     padding: 8px 5%;
   }
   .brand img {
-    width: 112px;
-    height: 60px;
+    height: 46px;
   }
   .header-cta {
     padding: 11px;

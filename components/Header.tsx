@@ -8,10 +8,10 @@ export default function Header() {
       <header className="header">
         <a href="#inicio" className="brand">
           <img
-            src="/images/logo-thaise-silverio.svg"
+            src="/images/logo-thaise-silverio-horizontal.webp"
             alt="Thaise Silvério — Micropigmentação e Estética"
-            width={150}
-            height={76}
+            width={518}
+            height={160}
           />
         </a>
         <nav aria-label="Menu principal">
