@@ -1,0 +1,118 @@
+/**
+ * Ponto de entrada do Cloudflare Worker.
+ *
+ * Disponibiliza os bindings (banco D1, bucket R2 e segredos) para a aplicação
+ * e adiciona cabeçalhos de segurança em todas as respostas.
+ */
+import {
+  handleImageOptimization,
+  DEFAULT_DEVICE_SIZES,
+  DEFAULT_IMAGE_SIZES,
+} from "vinext/server/image-optimization";
+import handler from "vinext/server/app-router-entry";
+
+interface Env {
+  ASSETS: Fetcher;
+  DB: D1Database;
+  BUCKET: R2Bucket;
+  ADMIN_EMAIL?: string;
+  ADMIN_PASSWORD_HASH?: string;
+  IMAGES?: {
+    input(stream: ReadableStream): {
+      transform(options: Record<string, unknown>): {
+        output(options: {
+          format: string;
+          quality: number;
+        }): Promise<{ response(): Response }>;
+      };
+    };
+  };
+}
+
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
+  passThroughOnException(): void;
+}
+
+const SECURITY_HEADERS = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy":
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+  "Content-Security-Policy":
+    "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+} as const;
+
+function withSecurityHeaders(response: Response) {
+  const headers = new Headers(response.headers);
+  for (const [key, value] of Object.entries(SECURITY_HEADERS))
+    headers.set(key, value);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+// Image security config. SVG sources with .svg extension auto-skip the
+// optimization endpoint on the client side (served directly, no proxy).
+// To route SVGs through the optimizer (with security headers), set
+// dangerouslyAllowSVG: true in next.config.js and uncomment below:
+// const imageConfig: ImageConfig = { dangerouslyAllowSVG: true };
+
+const worker = {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    (globalThis as typeof globalThis & { __TS_DB?: D1Database }).__TS_DB =
+      env.DB;
+    (globalThis as typeof globalThis & { __TS_BUCKET?: R2Bucket }).__TS_BUCKET =
+      env.BUCKET;
+    (
+      globalThis as typeof globalThis & { __TS_ADMIN_EMAIL?: string }
+    ).__TS_ADMIN_EMAIL = env.ADMIN_EMAIL;
+    (
+      globalThis as typeof globalThis & { __TS_ADMIN_PASSWORD_HASH?: string }
+    ).__TS_ADMIN_PASSWORD_HASH = env.ADMIN_PASSWORD_HASH;
+    const url = new URL(request.url);
+
+    if (url.pathname === "/_vinext/image") {
+      if (!env.IMAGES) {
+        const source = url.searchParams.get("url");
+        if (!source || !source.startsWith("/")) {
+          return new Response("Imagem inválida", { status: 400 });
+        }
+        return withSecurityHeaders(
+          await env.ASSETS.fetch(new Request(new URL(source, request.url))),
+        );
+      }
+      const images = env.IMAGES;
+      const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
+      return withSecurityHeaders(
+        await handleImageOptimization(
+          request,
+          {
+            fetchAsset: (path) =>
+              env.ASSETS.fetch(new Request(new URL(path, request.url))),
+            transformImage: async (body, { width, format, quality }) => {
+              const result = await images
+                .input(body)
+                .transform(width > 0 ? { width } : {})
+                .output({ format, quality });
+              return result.response();
+            },
+          },
+          allowedWidths,
+        ),
+      );
+    }
+
+    return withSecurityHeaders(await handler.fetch(request, env, ctx));
+  },
+};
+
+export default worker;

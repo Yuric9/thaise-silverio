@@ -1,4 +1,5 @@
-# Cabeçalhos de segurança aplicados pela Cloudflare Pages a todas as páginas
+# Cabeçalhos aplicados pela Cloudflare aos arquivos estáticos (imagens, CSS, JS).
+# As páginas e a API recebem os cabeçalhos de segurança em worker/index.ts.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -8,3 +9,7 @@
 # Imagens mudam pouco: deixa o navegador guardar por 30 dias
 /images/*
   Cache-Control: public, max-age=2592000
+
+# Arquivos com hash no nome nunca mudam (gerados pelo build)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

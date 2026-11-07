@@ -1,33 +1,42 @@
 # Site Thaise Silvério — guia para agentes
 
-Site institucional de uma página (Next.js 16 + React 19 + TypeScript), exportado
-como site estático (`output: "export"` → pasta `out/`) e publicado na
-Cloudflare Pages a partir da branch `main` (deploy automático a cada merge).
+Site público + painel de gestão (`/admin`) em um só projeto: Next.js 16 + React 19
+
+- TypeScript, executado pelo **vinext** em um **Cloudflare Worker**, com banco
+  **D1** (Drizzle ORM) e fotos no **R2**. O painel foi portado do projeto
+  `Yuric9/yuri-barbershop-app`, sem equipe e comissões (a Thaise atende sozinha).
 
 A dona do repositório está aprendendo programação: explique as mudanças em
 português, de forma simples, e mostre capturas de tela do resultado.
 
 ## Estrutura
 
-- `app/layout.tsx` — metadados, SEO e prévia de compartilhamento (Open Graph)
-- `app/page.tsx` — monta as seções na ordem
-- `app/globals.css` — todo o CSS; a paleta fica em variáveis no `:root`
-- `components/` — uma seção por arquivo (Header, Hero, About, Services,
-  Results, Courses, Contact, Footer)
-- `lib/site.ts` — dados editáveis: SITE_URL, WhatsApp, Instagram,
-  procedimentos e galeria de resultados
-- `public/images/` — monograma "TS" da logo oficial (cabeçalho e rodapé),
-  foto da Thaise e fotos de resultados (WebP)
-- `app/icon.png` e `app/apple-icon.png` — ícones feitos do monograma "TS" da logo
-- `public/_headers` — cabeçalhos de segurança e cache lidos pela Cloudflare Pages
+- `app/(site)/` — site público (página, layout com SEO/Open Graph e `site.css`)
+- `app/admin/` — painel: login ou painel conforme a sessão (`admin.css`)
+- `app/api/` — rotas da API; as do painel usam `adminRoute` (`lib/server/http.ts`)
+- `components/site/` — seções do site; recebem o conteúdo por props
+- `components/admin/` — telas do painel (`sections/`), modais e componentes
+- `lib/site-content.ts` — conteúdo padrão do site, tipos e links (WhatsApp, Instagram)
+- `lib/server/site.ts` — lê/salva conteúdo e galeria; cria os padrões no banco vazio
+- `lib/domain/` — regras puras (agenda com horário configurável, retoque, finanças)
+- `db/schema.ts` + `drizzle/` — tabelas e migrações
+- `worker/index.ts` — bindings (`DB`, `BUCKET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`)
+- `public/images/` — logo (monograma), foto da Thaise e fotos de resultados originais
 
 ## Comandos
 
 ```bash
 npm install
-npm run build    # gera out/ — rode sempre antes de commitar
-npm run format   # Prettier
+npm run typecheck
+npm test          # testes de regras + build + testes do Worker
+npm run db:generate   # depois de mudar db/schema.ts
 ```
+
+Teste local completo: `npm run build`, `npm run db:migrate:local`, criar
+`dist/server/.dev.vars` (ADMIN_EMAIL e ADMIN_PASSWORD_HASH) e rodar
+`npx wrangler dev --config dist/server/wrangler.json --local`. Se o runtime local
+recusar a data de compatibilidade, use `--compatibility-date` com a data que ele
+aceita (só no teste local).
 
 ## Regras do projeto
 
@@ -37,17 +46,36 @@ npm run format   # Prettier
   e escrever texto alternativo (`alt`) descritivo. As clientes das fotos atuais
   autorizaram o uso de imagem.
 - Mantenha a paleta rosé + dourado (variáveis em `app/globals.css`).
-- Links de WhatsApp: use `whatsappLink(mensagem)` de `lib/site.ts`; nunca
-  repita o número no código.
+- Links de WhatsApp do site: `whatsappLink(numero, mensagem)` de
+  `lib/site-content.ts`, com o número vindo do conteúdo salvo (`contact`).
+  Nunca escreva o número fixo em componentes.
+- Conteúdo editável pelo painel não deve ficar fixo nos componentes do site:
+  adicione o campo em `lib/site-content.ts`, valide em `lib/server/site.ts` e
+  crie o campo na tela `components/admin/sections/site.tsx`.
+- Mudou `db/schema.ts`? Gere a migração (`npm run db:generate`) e faça commit dela.
 - Textos: mínimo de 10px (11px no celular). Enfeites (setas, ✳, "TS")
   levam `aria-hidden="true"`.
-- Ao trocar para domínio próprio, atualize `SITE_URL` em `lib/site.ts`.
+- Ao trocar de endereço, atualize `SITE_URL` em `lib/site-content.ts`.
 
 ## Dados confirmados
 
 - Thaise Silvério: esteticista e cosmetóloga, especialista em micropigmentação
   há 6 anos, mais de 500 clientes atendidas.
 - WhatsApp: +55 62 8123-1427 · Instagram: @thaisesilverio_estetica
+
+## Publicação
+
+- Worker `thaise-silverio-app`, D1 `thaise-silverio-db`
+  (`44cba372-1f26-449d-a504-b8f58380900f`, em `vite.config.ts`) e R2
+  `thaise-silverio-fotos`, já criados na conta da Cloudflare.
+- O deploy command do Workers Builds aplica as migrações (`wrangler d1 migrations
+apply DB --remote`) antes do `wrangler deploy`. Veja o README.
+- Segredos: `ADMIN_EMAIL` e `ADMIN_PASSWORD_HASH` (gerado em
+  `public/ferramentas/gerar-senha.html`, no navegador). Nunca peça a senha no chat.
+- O projeto antigo da Cloudflare Pages (`thaise-silverio`, versão estática)
+  deixa de atualizar quando esta versão entra na `main`.
+- Preços e durações dos procedimentos vieram como "a definir" e o horário de
+  atendimento veio com um padrão: a Thaise precisa ajustar no painel.
 
 ## Ideias para o futuro (ainda não implementadas)
 

@@ -1,4 +1,8 @@
 node_modules
 .next
 out
+dist
+.wrangler
 package-lock.json
+drizzle/meta
+worker-configuration.d.ts
