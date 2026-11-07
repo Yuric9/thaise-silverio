@@ -478,8 +478,28 @@ footer .footer-brand em {
 footer > span:nth-child(2) {
   color: var(--on-dark-muted);
 }
-footer > a:last-child {
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+.footer-links a {
   color: var(--gold);
+}
+.footer-links a:hover {
+  color: #fff;
+}
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.button-line {
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+.button-line:hover {
+  background: var(--primary);
+  color: #fff;
 }
 .results {
   background: #fff;
@@ -664,7 +684,8 @@ footer > a:last-child {
   footer > span:nth-child(3) {
     grid-column: 1/-1;
   }
-  footer > a:last-child {
-    text-align: right;
+  .footer-links {
+    grid-column: 1/-1;
+    justify-content: space-between;
   }
 }

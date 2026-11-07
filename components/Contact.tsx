@@ -1,4 +1,4 @@
-import { WHATSAPP_URL } from "@/lib/site";
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL, WHATSAPP_URL } from "@/lib/site";
 
 export default function Contact() {
   return (
@@ -16,15 +16,25 @@ export default function Contact() {
           Entre em contato para tirar dúvidas, conhecer os procedimentos e
           consultar horários disponíveis.
         </p>
-        <a
-          className="button button-gold"
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Falar pelo WhatsApp <span>↗</span>
-        </a>
-        <small>(62) 8123-1427</small>
+        <div className="contact-actions">
+          <a
+            className="button button-gold"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Falar pelo WhatsApp <span>↗</span>
+          </a>
+          <a
+            className="button button-line"
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram <span>↗</span>
+          </a>
+        </div>
+        <small>WhatsApp (62) 8123-1427 · @{INSTAGRAM_HANDLE}</small>
       </div>
     </section>
   );

@@ -1,5 +1,11 @@
 // Dados do site: altere aqui sem precisar mexer nos componentes.
 
+// Endereço público do site (troque quando tiver domínio próprio).
+export const SITE_URL = "https://thaise-silverio.pages.dev";
+
+export const INSTAGRAM_HANDLE = "thaisesilverio_estetica";
+export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
+
 export const WHATSAPP_NUMBER = "556281231427"; // +55 (62) 8123-1427
 
 const WHATSAPP_MESSAGE =
