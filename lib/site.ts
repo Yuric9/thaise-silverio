@@ -54,3 +54,56 @@ export const services: Service[] = [
     tag: "Estética",
   },
 ];
+
+export type Result = {
+  src: string;
+  alt: string;
+  title: string;
+  tag: string;
+  width: number;
+  height: number;
+};
+
+// Fotos em public/images/resultados (WebP, até 1000px).
+export const results: Result[] = [
+  {
+    src: "/images/resultados/micropigmentacao-labial-antes-depois.webp",
+    alt: "Lábios antes e depois da micropigmentação labial, com cor mais viva e contorno definido",
+    title: "Micropigmentação labial",
+    tag: "Antes e depois",
+    width: 828,
+    height: 828,
+  },
+  {
+    src: "/images/resultados/sobrancelhas-fio-a-fio-antes-depois.webp",
+    alt: "Sobrancelhas antes e depois da micropigmentação, mais preenchidas e alinhadas",
+    title: "Sobrancelhas fio a fio",
+    tag: "Antes e depois",
+    width: 1000,
+    height: 1000,
+  },
+  {
+    src: "/images/resultados/tratamento-facial-procedimento.webp",
+    alt: "Cliente deitada recebendo aplicação de produto no rosto com pincel durante tratamento facial",
+    title: "Tratamento facial",
+    tag: "Procedimento",
+    width: 562,
+    height: 1000,
+  },
+  {
+    src: "/images/resultados/tratamento-facial-antes-depois.webp",
+    alt: "Pele do rosto antes e depois do tratamento facial, com menos vermelhidão e textura mais uniforme",
+    title: "Tratamento facial",
+    tag: "Antes e depois",
+    width: 1000,
+    height: 983,
+  },
+  {
+    src: "/images/resultados/sobrancelhas-antes-depois.webp",
+    alt: "Sobrancelhas antes e depois da micropigmentação, com desenho mais definido",
+    title: "Micropigmentação de sobrancelhas",
+    tag: "Antes e depois",
+    width: 800,
+    height: 1000,
+  },
+];

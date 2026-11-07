@@ -35,9 +35,14 @@ export default function Hero() {
       </div>
       <div className="hero-art">
         <div className="art-frame">
-          <div className="art-orbit orbit-one" />
-          <div className="art-orbit orbit-two" />
-          <div className="art-monogram">TS</div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="art-photo"
+            src="/images/thaise-silverio.webp"
+            alt="Thaise Silvério sorrindo, sentada em uma cadeira, de blazer e calça brancos"
+            width={900}
+            height={1200}
+          />
           <div className="art-caption">SUA ESSÊNCIA, EM DESTAQUE</div>
         </div>
         <span className="art-side">THAISE SILVÉRIO · ESTÉTICA</span>

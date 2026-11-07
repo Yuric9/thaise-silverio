@@ -17,6 +17,7 @@ export default function Header() {
           <a href="#inicio">Início</a>
           <a href="#sobre">Sobre</a>
           <a href="#procedimentos">Procedimentos</a>
+          <a href="#resultados">Resultados</a>
           <a href="#cursos">Cursos</a>
           <a href="#contato">Contato</a>
         </nav>
