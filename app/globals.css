@@ -1,20 +1,20 @@
 :root {
   /* Paleta: troque só estes valores para mudar as cores do site */
-  --primary: #0849ae; /* links e destaques */
-  --primary-deep: #062d69; /* títulos, faixa do topo, seção de cursos */
-  --primary-darkest: #061f4a; /* rodapé */
-  --hero-start: #073b91; /* degradê do topo */
-  --hero-mid: #0849ae;
-  --hero-end: #0b3c89;
-  --on-dark: #e0e8f6; /* texto claro sobre fundo escuro */
-  --on-dark-muted: #c8d5e9;
+  --primary: #a0506d; /* links e destaques */
+  --primary-deep: #6e3049; /* títulos, faixa do topo, seção de cursos */
+  --primary-darkest: #4f2133; /* rodapé */
+  --hero-start: #8a4560; /* degradê do topo */
+  --hero-mid: #a35a76;
+  --hero-end: #7d3d56;
+  --on-dark: #fbecf1; /* texto claro sobre fundo escuro */
+  --on-dark-muted: #efd0db;
   --gold: #e9c77d;
   --rose: #c783a0;
-  --cream: #f7f3ec;
-  --ink: #17233b; /* texto principal */
-  --ink-soft: #41485a; /* menu */
+  --cream: #faf3f1;
+  --ink: #3a2029; /* texto principal */
+  --ink-soft: #6a4f58; /* menu */
   --muted: #777b84;
-  --shadow: var(--shadow);
+  --shadow: rgba(110, 48, 73, 0.08);
 }
 * {
   box-sizing: border-box;
@@ -112,7 +112,8 @@ a {
   font-weight: 600;
   color: var(--rose);
 }
-.hero .eyebrow {
+.hero .eyebrow,
+.statement .eyebrow {
   color: #f0d69d;
 }
 .eyebrow i {
@@ -474,7 +475,7 @@ footer .footer-brand em {
   font-weight: 400;
 }
 footer > span:nth-child(2) {
-  color: var(--rose);
+  color: var(--on-dark-muted);
 }
 footer > a:last-child {
   color: var(--gold);
