@@ -43,7 +43,7 @@ export default function About() {
           ))}
         </dl>
         <a className="text-link" href="#contato">
-          Vamos conversar <span>→</span>
+          Vamos conversar <span aria-hidden="true">→</span>
         </a>
       </div>
     </section>

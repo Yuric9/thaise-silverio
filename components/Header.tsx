@@ -7,13 +7,14 @@ export default function Header() {
       </div>
       <header className="header">
         <a href="#inicio" className="brand">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/logo-thaise-silverio.svg"
             alt="Thaise Silvério — Micropigmentação e Estética"
+            width={150}
+            height={76}
           />
         </a>
-        <nav>
+        <nav aria-label="Menu principal">
           <a href="#inicio">Início</a>
           <a href="#sobre">Sobre</a>
           <a href="#procedimentos">Procedimentos</a>
@@ -22,7 +23,7 @@ export default function Header() {
           <a href="#contato">Contato</a>
         </nav>
         <a className="header-cta" href="#contato">
-          Agendar avaliação <span>↗</span>
+          Agendar avaliação <span aria-hidden="true">↗</span>
         </a>
       </header>
     </>

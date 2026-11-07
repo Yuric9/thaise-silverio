@@ -35,6 +35,10 @@ npm run format   # Prettier
   e escrever texto alternativo (`alt`) descritivo. As clientes das fotos atuais
   autorizaram o uso de imagem.
 - Mantenha a paleta rosé + dourado (variáveis em `app/globals.css`).
+- Links de WhatsApp: use `whatsappLink(mensagem)` de `lib/site.ts`; nunca
+  repita o número no código.
+- Textos: mínimo de 10px (11px no celular). Enfeites (setas, ✳, "TS")
+  levam `aria-hidden="true"`.
 - Ao trocar para domínio próprio, atualize `SITE_URL` em `lib/site.ts`.
 
 ## Dados confirmados

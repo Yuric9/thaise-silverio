@@ -6,14 +6,18 @@ export const SITE_URL = "https://thaise-silverio.pages.dev";
 export const INSTAGRAM_HANDLE = "thaisesilverio_estetica";
 export const INSTAGRAM_URL = `https://www.instagram.com/${INSTAGRAM_HANDLE}/`;
 
-export const WHATSAPP_NUMBER = "556281231427"; // +55 (62) 8123-1427
+// WhatsApp: altere só aqui (o número aparece no botão e no texto do contato).
+export const WHATSAPP_NUMBER = "556281231427"; // só dígitos, com 55 + DDD
+export const WHATSAPP_DISPLAY = "(62) 8123-1427"; // como aparece para a cliente
 
-const WHATSAPP_MESSAGE =
-  "Olá, Thaise! Vim pelo site e gostaria de agendar uma avaliação.";
+// Monta um link do WhatsApp que já abre a conversa com a mensagem escrita.
+export function whatsappLink(message: string): string {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
 
-export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-  WHATSAPP_MESSAGE,
-)}`;
+export const WHATSAPP_URL = whatsappLink(
+  "Olá, Thaise! Vim pelo site e gostaria de agendar uma avaliação.",
+);
 
 export type Service = {
   n: string;

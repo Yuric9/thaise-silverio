@@ -1,4 +1,4 @@
-import { services } from "@/lib/site";
+import { services, whatsappLink } from "@/lib/site";
 
 export default function Services() {
   return (
@@ -22,11 +22,20 @@ export default function Services() {
               <span>{s.n}</span>
               <span className="service-tag">{s.tag}</span>
             </div>
-            <div className="service-symbol">✳</div>
+            <div className="service-symbol" aria-hidden="true">
+              ✳
+            </div>
             <h3>{s.title}</h3>
             <p>{s.desc}</p>
-            <a href="#contato">
-              Saiba mais <span>↗</span>
+            <a
+              href={whatsappLink(
+                `Olá, Thaise! Vim pelo site e quero saber mais sobre ${s.title}.`,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Saiba mais<span className="sr-only"> sobre {s.title}</span>{" "}
+              <span aria-hidden="true">↗</span>
             </a>
           </article>
         ))}

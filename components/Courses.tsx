@@ -1,3 +1,5 @@
+import { whatsappLink } from "@/lib/site";
+
 export default function Courses() {
   return (
     <section className="statement" id="cursos">
@@ -12,11 +14,20 @@ export default function Courses() {
           Formação e aperfeiçoamento em micropigmentação, com foco em técnica,
           segurança e evolução profissional.
         </p>
-        <a className="button button-outline" href="#contato">
-          Conheça os cursos <span>↗</span>
+        <a
+          className="button button-outline"
+          href={whatsappLink(
+            "Olá, Thaise! Vim pelo site e quero saber mais sobre os cursos de micropigmentação.",
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Conheça os cursos <span aria-hidden="true">↗</span>
         </a>
       </div>
-      <div className="statement-mark">TS</div>
+      <div className="statement-mark" aria-hidden="true">
+        TS
+      </div>
     </section>
   );
 }
