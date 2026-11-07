@@ -17,6 +17,7 @@ português, de forma simples, e mostre capturas de tela do resultado.
 - `lib/site.ts` — dados editáveis: SITE_URL, WhatsApp, Instagram,
   procedimentos e galeria de resultados
 - `public/images/` — logo, foto da Thaise e fotos de resultados (WebP)
+- `public/_headers` — cabeçalhos de segurança e cache lidos pela Cloudflare Pages
 
 ## Comandos
 
