@@ -223,27 +223,27 @@ a {
   inset: 13px;
   border: 1px solid rgba(233, 199, 125, 0.45);
 }
-.art-orbit {
+.art-photo {
   position: absolute;
-  border: 1px solid rgba(233, 199, 125, 0.55);
-  border-radius: 50%;
-  width: 260px;
-  height: 260px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
 }
-.orbit-two {
-  width: 290px;
-  height: 290px;
-  border-color: rgba(199, 131, 160, 0.65);
+.art-frame:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(79, 33, 51, 0.75), transparent 35%);
 }
-.art-monogram {
-  font: 150px Georgia;
-  color: var(--gold);
-  letter-spacing: -15px;
-  z-index: 1;
+.art-frame:before {
+  z-index: 2;
 }
 .art-caption {
   position: absolute;
-  bottom: 45px;
+  z-index: 2;
+  bottom: 35px;
   font-size: 8px;
   letter-spacing: 3px;
   color: #f2dcae;
@@ -605,18 +605,7 @@ footer > a:last-child {
     margin-top: 35px;
   }
   .art-frame {
-    width: 245px;
-  }
-  .art-orbit {
-    width: 190px;
-    height: 190px;
-  }
-  .orbit-two {
-    width: 215px;
-    height: 215px;
-  }
-  .art-monogram {
-    font-size: 115px;
+    width: 280px;
   }
   .hero-note {
     margin-top: 45px;
