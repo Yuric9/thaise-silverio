@@ -1,12 +1,20 @@
-/* Estilo luxo: azul profundo, dourado e rosé */
 :root {
-  --blue: #0849ae;
-  --blue-deep: #062d69;
+  /* Paleta: troque só estes valores para mudar as cores do site */
+  --primary: #0849ae; /* links e destaques */
+  --primary-deep: #062d69; /* títulos, faixa do topo, seção de cursos */
+  --primary-darkest: #061f4a; /* rodapé */
+  --hero-start: #073b91; /* degradê do topo */
+  --hero-mid: #0849ae;
+  --hero-end: #0b3c89;
+  --on-dark: #e0e8f6; /* texto claro sobre fundo escuro */
+  --on-dark-muted: #c8d5e9;
   --gold: #e9c77d;
   --rose: #c783a0;
   --cream: #f7f3ec;
-  --ink: #17233b;
+  --ink: #17233b; /* texto principal */
+  --ink-soft: #41485a; /* menu */
   --muted: #777b84;
+  --shadow: var(--shadow);
 }
 * {
   box-sizing: border-box;
@@ -26,7 +34,7 @@ a {
 }
 .topline {
   height: 32px;
-  background: var(--blue-deep);
+  background: var(--primary-deep);
   color: #e8d6ad;
   display: flex;
   justify-content: space-between;
@@ -54,7 +62,7 @@ a {
   display: flex;
   gap: 30px;
   font-size: 12px;
-  color: #41485a;
+  color: var(--ink-soft);
 }
 .header nav a:hover {
   color: var(--rose);
@@ -70,7 +78,12 @@ a {
 }
 .hero {
   min-height: 650px;
-  background: linear-gradient(112deg, #073b91, #0849ae 56%, #0b3c89);
+  background: linear-gradient(
+    112deg,
+    var(--hero-start),
+    var(--hero-mid) 56%,
+    var(--hero-end)
+  );
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -128,7 +141,7 @@ a {
 }
 .hero-text {
   max-width: 420px;
-  color: #e0e8f6;
+  color: var(--on-dark);
   font-size: 14px;
   line-height: 1.9;
 }
@@ -150,7 +163,7 @@ a {
 }
 .button-gold {
   background: var(--gold);
-  color: #14294a;
+  color: var(--ink);
 }
 .text-link {
   font-size: 11px;
@@ -167,7 +180,7 @@ a {
   margin-top: 75px;
   font-size: 8px;
   letter-spacing: 1.5px;
-  color: #d5dfef;
+  color: var(--on-dark);
 }
 .seal {
   width: 40px;
@@ -250,7 +263,7 @@ a {
   right: 8%;
   display: flex;
   justify-content: space-between;
-  color: #c8d5e9;
+  color: var(--on-dark-muted);
   font-size: 8px;
   letter-spacing: 2px;
 }
@@ -280,7 +293,7 @@ a {
     400 clamp(34px, 4vw, 52px)/1.16 Georgia,
     serif;
   margin: 18px 0;
-  color: var(--blue-deep);
+  color: var(--primary-deep);
 }
 .intro h2 em,
 .section-heading h2 em,
@@ -299,7 +312,7 @@ a {
 }
 .intro-aside .text-link {
   display: inline-block;
-  color: var(--blue);
+  color: var(--primary);
   border-color: var(--gold);
   margin-top: 12px;
 }
@@ -335,7 +348,7 @@ a {
 }
 .service-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 18px 40px rgba(20, 38, 72, 0.08);
+  box-shadow: 0 18px 40px var(--shadow);
   border-color: var(--gold);
 }
 .service-top {
@@ -359,7 +372,7 @@ a {
   font:
     22px/1.2 Georgia,
     serif;
-  color: var(--blue-deep);
+  color: var(--primary-deep);
   font-weight: 400;
   margin: 0 0 12px;
 }
@@ -373,7 +386,7 @@ a {
   display: inline-block;
   margin-top: 13px;
   font-size: 10px;
-  color: var(--blue);
+  color: var(--primary);
   border-bottom: 1px solid var(--gold);
   padding-bottom: 7px;
 }
@@ -381,7 +394,7 @@ a {
   margin-left: 18px;
 }
 .statement {
-  background: var(--blue-deep);
+  background: var(--primary-deep);
   color: white;
   min-height: 430px;
   padding: 90px 10%;
@@ -405,7 +418,7 @@ a {
 .statement-inner > p:not(.eyebrow) {
   font-size: 13px;
   line-height: 1.9;
-  color: #d1d9e6;
+  color: var(--on-dark);
   max-width: 460px;
   margin-bottom: 28px;
 }
@@ -442,8 +455,8 @@ a {
   font-size: 9px;
 }
 footer {
-  background: #061f4a;
-  color: #c9d4e6;
+  background: var(--primary-darkest);
+  color: var(--on-dark-muted);
   padding: 32px 6%;
   display: flex;
   align-items: center;
