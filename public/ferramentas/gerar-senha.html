@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Gerar código da senha | Thaise Silvério</title>
+    <style>
+      :root {
+        --vinho: #4f2133;
+        --rose: #a0506d;
+        --dourado: #c9a25a;
+        --creme: #faf3f1;
+        --texto: #3a2029;
+        --muted: #7a6168;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+        background: var(--creme);
+        color: var(--texto);
+        font:
+          16px/1.6 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Arial,
+          sans-serif;
+      }
+      main {
+        width: min(560px, 100%);
+        background: #fff;
+        border: 1px solid #eedfe0;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 4px 16px rgb(79 33 51 / 8%);
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          400 28px/1.2 Georgia,
+          serif;
+        color: var(--vinho);
+      }
+      p,
+      li {
+        color: var(--muted);
+      }
+      label {
+        display: block;
+        margin-top: 16px;
+        font-weight: 600;
+      }
+      input,
+      textarea {
+        width: 100%;
+        margin-top: 6px;
+        padding: 12px;
+        border: 1px solid #dcc4c9;
+        border-radius: 10px;
+        font: inherit;
+      }
+      textarea {
+        font-family: ui-monospace, Consolas, monospace;
+        font-size: 13px;
+        word-break: break-all;
+      }
+      button {
+        margin-top: 16px;
+        padding: 12px 18px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--vinho);
+        color: #fff;
+        font: 600 15px/1 inherit;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+      .aviso {
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 10px;
+        background: #f8efe0;
+        color: #6b4e1f;
+      }
+      .erro {
+        color: #a3423a;
+        font-weight: 600;
+      }
+      [hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Gerar o código da senha</h1>
+      <p>
+        Esta página transforma a senha do painel em um código seguro (hash). A
+        senha <strong>não sai deste navegador</strong>: o cálculo é feito aqui
+        mesmo, sem enviar nada para a internet.
+      </p>
+
+      <form id="form">
+        <label for="senha">Senha do painel</label>
+        <input
+          id="senha"
+          type="password"
+          autocomplete="new-password"
+          minlength="10"
+          required
+        />
+        <label for="confirma">Repita a senha</label>
+        <input
+          id="confirma"
+          type="password"
+          autocomplete="new-password"
+          minlength="10"
+          required
+        />
+        <p id="erro" class="erro" role="alert" hidden></p>
+        <button id="gerar" type="submit">Gerar código</button>
+      </form>
+
+      <section id="resultado" hidden>
+        <label for="codigo">Código para o segredo ADMIN_PASSWORD_HASH</label>
+        <textarea id="codigo" rows="4" readonly></textarea>
+        <button id="copiar" type="button">Copiar código</button>
+        <div class="aviso">
+          Cole este código na Cloudflare, no segredo
+          <strong>ADMIN_PASSWORD_HASH</strong> do Worker. Guarde a senha em um
+          lugar seguro: ela não pode ser recuperada a partir do código.
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Mesmo formato usado pelo painel (lib/server/passwords.ts):
+      // pbkdf2-sha256$<iterações>$<salt>$<hash>, em base64url.
+      const ITERACOES = 100000;
+      const base64url = (bytes) =>
+        btoa(String.fromCharCode(...bytes))
+          .replaceAll("+", "-")
+          .replaceAll("/", "_")
+          .replace(/=+$/, "");
+
+      async function gerarHash(senha) {
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const chave = await crypto.subtle.importKey(
+          "raw",
+          new TextEncoder().encode(senha),
+          "PBKDF2",
+          false,
+          ["deriveBits"],
+        );
+        const bits = await crypto.subtle.deriveBits(
+          { name: "PBKDF2", hash: "SHA-256", salt, iterations: ITERACOES },
+          chave,
+          256,
+        );
+        return [
+          "pbkdf2-sha256",
+          ITERACOES,
+          base64url(salt),
+          base64url(new Uint8Array(bits)),
+        ].join("$");
+      }
+
+      const form = document.getElementById("form");
+      const erro = document.getElementById("erro");
+      const botao = document.getElementById("gerar");
+
+      form.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        const senha = document.getElementById("senha").value;
+        const confirma = document.getElementById("confirma").value;
+        erro.hidden = true;
+        if (senha.length < 10) {
+          erro.textContent = "Use uma senha com pelo menos 10 caracteres.";
+          erro.hidden = false;
+          return;
+        }
+        if (senha !== confirma) {
+          erro.textContent = "As duas senhas estão diferentes.";
+          erro.hidden = false;
+          return;
+        }
+        botao.disabled = true;
+        botao.textContent = "Gerando...";
+        document.getElementById("codigo").value = await gerarHash(senha);
+        document.getElementById("resultado").hidden = false;
+        form.reset();
+        botao.disabled = false;
+        botao.textContent = "Gerar código";
+      });
+
+      document.getElementById("copiar").addEventListener("click", async () => {
+        const codigo = document.getElementById("codigo");
+        try {
+          await navigator.clipboard.writeText(codigo.value);
+        } catch {
+          codigo.select();
+          document.execCommand("copy");
+        }
+        document.getElementById("copiar").textContent = "Copiado!";
+      });
+    </script>
+  </body>
+</html>

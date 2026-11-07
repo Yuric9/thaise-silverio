@@ -63,12 +63,17 @@ aceita (só no teste local).
   há 6 anos, mais de 500 clientes atendidas.
 - WhatsApp: +55 62 8123-1427 · Instagram: @thaisesilverio_estetica
 
-## Pendências da publicação
+## Publicação
 
-- Criar D1 e R2 na Cloudflare, preencher `CLOUDFLARE_DATABASE_ID` em
-  `vite.config.ts` e cadastrar os segredos do Worker (veja o README).
-- A `main` ainda publica a versão estática na Cloudflare Pages: só fazer merge
-  desta versão depois que o Worker estiver configurado.
+- Worker `thaise-silverio-app`, D1 `thaise-silverio-db`
+  (`44cba372-1f26-449d-a504-b8f58380900f`, em `vite.config.ts`) e R2
+  `thaise-silverio-fotos`, já criados na conta da Cloudflare.
+- O deploy command do Workers Builds aplica as migrações (`wrangler d1 migrations
+apply DB --remote`) antes do `wrangler deploy`. Veja o README.
+- Segredos: `ADMIN_EMAIL` e `ADMIN_PASSWORD_HASH` (gerado em
+  `public/ferramentas/gerar-senha.html`, no navegador). Nunca peça a senha no chat.
+- O projeto antigo da Cloudflare Pages (`thaise-silverio`, versão estática)
+  deixa de atualizar quando esta versão entra na `main`.
 - Preços e durações dos procedimentos vieram como "a definir" e o horário de
   atendimento veio com um padrão: a Thaise precisa ajustar no painel.
 

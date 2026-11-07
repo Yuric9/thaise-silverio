@@ -153,18 +153,28 @@ conteúdo padrão (`lib/site-content.ts`), usado enquanto nada foi salvo no pain
 
 ## Publicação na Cloudflare
 
-O projeto roda como **Cloudflare Worker** com banco **D1** e fotos no **R2**.
-Primeira publicação:
+O projeto roda como o Worker **`thaise-silverio-app`**, com o banco D1
+**`thaise-silverio-db`** e o bucket R2 **`thaise-silverio-fotos`** (os dois já
+criados; o ID do banco está em `vite.config.ts`).
 
-1. Crie o banco D1 `thaise-silverio-db` e o bucket R2 `thaise-silverio-fotos`.
-2. Coloque o `database_id` do banco em `CLOUDFLARE_DATABASE_ID` (`vite.config.ts`).
-3. Gere o hash da senha da administradora (`npm run admin:hash-password`) e cadastre
-   os segredos do Worker `ADMIN_EMAIL` e `ADMIN_PASSWORD_HASH`.
-4. Publique com `npm run deploy` (build, migrações do banco e envio do Worker) ou
-   conecte o repositório em **Workers & Pages → Create → Workers → Import a repository**,
-   com build `npm run build` e deploy
-   `npx wrangler d1 migrations apply DB --remote --config dist/server/wrangler.json && npx wrangler deploy --config dist/server/wrangler.json`.
-5. Depois de conferir o novo endereço, atualize `SITE_URL` em `lib/site-content.ts`.
+**Configuração do Worker** (Workers & Pages → Create → Workers → Import a repository):
+
+- Repositório: `Yuric9/thaise-silverio`, branch `main`
+- Nome do projeto: `thaise-silverio-app` (precisa ser igual ao `name` do `wrangler.jsonc`)
+- Build command: `npm run build`
+- Deploy command:
+  `npx wrangler d1 migrations apply DB --remote --config dist/server/wrangler.json && npx wrangler deploy --config dist/server/wrangler.json`
+  (aplica as migrações do banco e publica)
+
+**Segredos do Worker** (Settings → Variables and Secrets, tipo _Secret_):
+
+- `ADMIN_EMAIL`: e-mail de acesso ao painel
+- `ADMIN_PASSWORD_HASH`: código da senha, gerado em `/ferramentas/gerar-senha.html`
+  (a senha é transformada no próprio navegador e não é enviada a lugar nenhum)
+
+Depois de conferir o endereço `*.workers.dev`, atualize `SITE_URL` em
+`lib/site-content.ts`. O projeto antigo da Cloudflare Pages (`thaise-silverio`)
+pode ser desconectado do GitHub ou excluído quando o novo endereço estiver em uso.
 
 **Voltar a uma versão anterior:** no painel da Cloudflare, abra o Worker, vá em
 **Deployments** e use **Rollback**.

@@ -3,10 +3,10 @@ import { defineConfig } from "vite";
 
 /**
  * Banco D1 e armazenamento de fotos R2 da Cloudflare.
- * O `database_id` é preenchido depois de criar o banco na Cloudflare
- * (veja o README, seção "Publicação"). Localmente, o Wrangler simula os dois.
+ * O banco `thaise-silverio-db` e o bucket `thaise-silverio-fotos` já existem na
+ * conta da Cloudflare. Localmente, o Wrangler simula os dois.
  */
-const CLOUDFLARE_DATABASE_ID = "00000000-0000-0000-0000-000000000000";
+const CLOUDFLARE_DATABASE_ID = "44cba372-1f26-449d-a504-b8f58380900f";
 
 const bindingConfig = {
   main: "./worker/index.ts",
