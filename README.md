@@ -70,7 +70,7 @@ app/
   layout.tsx        metadados, SEO e prévia de compartilhamento
   page.tsx          monta as seções na ordem
   globals.css       estilos e paleta de cores
-  icon.svg          favicon
+  icon.png          favicon (monograma da logo)
 components/         uma seção por arquivo (Header, Hero, About, Services,
                     Results, Courses, Contact, Footer)
 lib/site.ts         dados editáveis: endereço do site, WhatsApp, Instagram,
