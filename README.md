@@ -24,6 +24,7 @@ No painel da Cloudflare:
    - Build command: `npm run build`.
    - Build output directory: `out`.
    - Root directory: `/` (raiz do repositório).
+   - A versão do Node.js (22) é lida automaticamente do arquivo `.nvmrc`.
 4. Salve e inicie a implantação.
 
 O projeto usa exportação estática; recursos que exigem servidor Next.js não estão habilitados nesta configuração.
