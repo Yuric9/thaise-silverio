@@ -45,7 +45,12 @@ aceita (só no teste local).
 - Fotos novas: converter para WebP (até ~1000px), remover metadados (EXIF/GPS)
   e escrever texto alternativo (`alt`) descritivo. As clientes das fotos atuais
   autorizaram o uso de imagem.
-- Mantenha a paleta rosé + dourado (variáveis em `app/globals.css`).
+- Mantenha a paleta rosé + dourado (variáveis no início de `app/(site)/site.css`).
+- **CSS isolado:** o build junta o CSS do site e do painel num arquivo só. Toda
+  regra de `app/(site)/site.css` começa com `.site-scope` e toda regra de
+  `app/admin/admin.css` com `.admin-scope` (as variáveis ficam em
+  `:root:has(.site-scope)` / `:root:has(.admin-scope)`). Ao criar regras novas,
+  use o prefixo ou rode `node scripts/scope-css.mjs <arquivo> <.classe>`.
 - Links de WhatsApp do site: `whatsappLink(numero, mensagem)` de
   `lib/site-content.ts`, com o número vindo do conteúdo salvo (`contact`).
   Nunca escreva o número fixo em componentes.
@@ -59,6 +64,8 @@ aceita (só no teste local).
 
 ## Dados confirmados
 
+- Studio Thaise Silvério — R. Ibirapuera, Jardim Marista, Trindade – GO,
+  CEP 75383-414 (perfil do Google, mostrado pela dona). Editável em Site → Contatos.
 - Thaise Silvério: esteticista e cosmetóloga, especialista em micropigmentação
   há 6 anos, mais de 500 clientes atendidas.
 - WhatsApp: +55 62 8123-1427 · Instagram: @thaisesilverio_estetica
@@ -87,8 +94,6 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
 
 ## Ideias para o futuro (ainda não implementadas)
 
-- **Cidade/endereço de atendimento** na bio e no contato (melhora o SEO local).
-  Aguardando a dona confirmar.
 - **Técnicas que ela domina** (ex.: fio a fio, shadow, revitalização labial)
   na bio ou nos cards de procedimentos. Aguardando confirmação.
 - **Biossegurança** (material descartável, esterilização, pigmentos

@@ -7,6 +7,7 @@ import Header from "@/components/site/Header";
 import Hero from "@/components/site/Hero";
 import Results from "@/components/site/Results";
 import Services from "@/components/site/Services";
+import StructuredData from "@/components/site/StructuredData";
 import { getPublicSite } from "@/lib/server/site";
 
 // O conteúdo vem do banco: a página é montada a cada visita, para refletir
@@ -36,6 +37,7 @@ export default async function Home() {
         <Contact contact={contact} text={texts.contactText} />
       </main>
       <Footer contact={contact} />
+      <StructuredData contact={contact} />
     </>
   );
 }

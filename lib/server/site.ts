@@ -48,6 +48,42 @@ export const contactSchema = z.object({
           "Instagram: use só o nome do perfil, sem espaços.",
         ),
     ),
+  // Campos de endereço vieram depois: são opcionais para não invalidar o que
+  // já estava salvo (o que faltar usa o padrão de lib/site-content.ts).
+  studioName: z
+    .string()
+    .trim()
+    .max(80, "Nome do estúdio muito longo.")
+    .optional(),
+  street: z.string().trim().max(120, "Rua muito longa.").optional(),
+  neighborhood: z.string().trim().max(80, "Bairro muito longo.").optional(),
+  city: z.string().trim().max(80, "Cidade muito longa.").optional(),
+  state: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .max(2, "Use a sigla do estado (ex.: GO).")
+    .optional(),
+  postalCode: z
+    .string()
+    .trim()
+    .refine(
+      (value) => !value || /^\d{5}-?\d{3}$/.test(value),
+      "CEP: use o formato 00000-000.",
+    )
+    .optional(),
+  googleReviewUrl: z
+    .string()
+    .trim()
+    .refine(
+      (value) =>
+        !value ||
+        /^https:\/\/(g\.page|www\.google\.com|google\.com|maps\.app\.goo\.gl|search\.google\.com)\//.test(
+          value,
+        ),
+      "Avaliação no Google: cole o link que o Google gera (começa com https://g.page/ ou https://search.google.com/).",
+    )
+    .optional(),
 });
 
 export const highlightsSchema = z
@@ -115,6 +151,12 @@ export async function ensureSiteSeed(db: Database) {
   }
 }
 
+function stripUndefined(value: object) {
+  return Object.fromEntries(
+    Object.entries(value).filter(([, item]) => item !== undefined),
+  );
+}
+
 export async function readSiteContent(db: Database): Promise<SiteContent> {
   const rows = await db.select().from(siteContent);
   const content: SiteContent = structuredClone(DEFAULT_SITE_CONTENT);
@@ -124,8 +166,16 @@ export async function readSiteContent(db: Database): Promise<SiteContent> {
     try {
       const parsed = contentSchemas[key].safeParse(JSON.parse(row.value));
       // Um valor salvo que não passa na validação é ignorado (fica o padrão).
-      if (parsed.success)
-        (content as Record<SiteContentKey, unknown>)[key] = parsed.data;
+      if (parsed.success) {
+        const defaults = (
+          DEFAULT_SITE_CONTENT as Record<SiteContentKey, unknown>
+        )[key];
+        // Objetos (contatos, textos): o que não foi salvo fica com o padrão.
+        (content as Record<SiteContentKey, unknown>)[key] =
+          defaults && !Array.isArray(defaults)
+            ? { ...defaults, ...stripUndefined(parsed.data as object) }
+            : parsed.data;
+      }
     } catch {
       // JSON inválido: mantém o padrão.
     }

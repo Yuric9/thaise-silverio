@@ -83,3 +83,26 @@ test("segredos colados com espaço, quebra de linha ou aspas ainda funcionam", a
   assert.equal(cleanSecret('"Thaise@Exemplo.com "'), "Thaise@Exemplo.com");
   assert.equal(cleanSecret(undefined), "");
 });
+
+test("endereço e link do Google Maps do estúdio", async () => {
+  const { addressLine, mapsUrl } = await import("../lib/site-content.ts");
+  const contact = { ...DEFAULT_SITE_CONTENT.contact };
+  assert.equal(
+    addressLine(contact),
+    "R. Ibirapuera, Jardim Marista, Trindade – GO",
+  );
+  assert.match(
+    mapsUrl(contact),
+    /^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=Studio%20Thaise/,
+  );
+  assert.equal(
+    addressLine({
+      ...contact,
+      street: "",
+      neighborhood: "",
+      city: "",
+      state: "",
+    }),
+    "",
+  );
+});

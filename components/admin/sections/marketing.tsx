@@ -45,7 +45,10 @@ type Campaign =
 const firstName = (client: ClientSummary) => client.name.split(" ")[0];
 
 /** Campanhas: quem entra em cada lista e qual mensagem enviar. */
-function campaigns(instagram: string): Record<
+function campaigns(
+  instagram: string,
+  reviewUrl: string,
+): Record<
   Campaign,
   {
     label: string;
@@ -56,10 +59,11 @@ function campaigns(instagram: string): Record<
   return {
     pos: {
       label: "Pós-atendimento",
-      description:
-        "Clientes atendidas nos últimos 7 dias: pergunte como foi e peça para marcar o Instagram.",
+      description: reviewUrl
+        ? "Clientes atendidas nos últimos 7 dias: pergunte como foi e peça uma avaliação no Google."
+        : "Clientes atendidas nos últimos 7 dias: pergunte como foi e peça para marcar o Instagram.",
       message: (client) =>
-        `Olá, ${firstName(client)}! Tudo bem? ✨\n\nObrigada por confiar no meu trabalho! Como você está se sentindo com ${client.lastService ?? "o procedimento"}? Qualquer dúvida sobre os cuidados, é só me chamar.\n\n📸 Se postar o resultado, marque @${instagram}!`,
+        `Olá, ${firstName(client)}! Tudo bem? ✨\n\nObrigada por confiar no meu trabalho! Como você está se sentindo com ${client.lastService ?? "o procedimento"}? Qualquer dúvida sobre os cuidados, é só me chamar.${reviewUrl ? `\n\n⭐ Se puder, deixe sua avaliação no Google, ajuda muito:\n${reviewUrl}` : ""}\n\n📸 Se postar o resultado, marque @${instagram}!`,
     },
     retoque: {
       label: "Retoque",
@@ -114,6 +118,7 @@ export default function MarketingSection() {
   const CAMPAIGNS = campaigns(
     site.data?.content.contact.instagramHandle ??
       DEFAULT_SITE_CONTENT.contact.instagramHandle,
+    site.data?.content.contact.googleReviewUrl ?? "",
   );
   const [campaign, setCampaign] = useState<Campaign>("pos");
   const [inactiveDays, setInactiveDays] = useState(30);
