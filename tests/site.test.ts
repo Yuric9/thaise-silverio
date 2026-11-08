@@ -73,3 +73,13 @@ test("imagens: fotos do site e fotos enviadas pelo painel", () => {
   );
   assert.equal(imageUrl(""), "");
 });
+
+test("segredos colados com espaço, quebra de linha ou aspas ainda funcionam", async () => {
+  const { cleanSecret } = await import("../lib/server/runtime-config.ts");
+  assert.equal(
+    cleanSecret("  pbkdf2-sha256$100000$abc$def\n"),
+    "pbkdf2-sha256$100000$abc$def",
+  );
+  assert.equal(cleanSecret('"Thaise@Exemplo.com "'), "Thaise@Exemplo.com");
+  assert.equal(cleanSecret(undefined), "");
+});
