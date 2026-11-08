@@ -25,6 +25,11 @@ export default function Footer({ contact }: { contact: ContactContent }) {
         >
           @{contact.instagramHandle}
         </a>
+        {/* Entrada do painel: discreta, só para a Thaise. Recarrega a página
+            de propósito, porque o painel tem um CSS diferente do site. */}
+        <a href="/admin" className="footer-admin" rel="nofollow">
+          Área restrita
+        </a>
         <a href="#inicio">Voltar ao topo ↑</a>
       </div>
     </footer>

@@ -530,13 +530,23 @@ footer > span:nth-child(2) {
 }
 .footer-links {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
 }
 .footer-links a {
   color: var(--gold);
 }
 .footer-links a:hover {
   color: #fff;
+}
+/* Acesso ao painel: mais apagado que os outros links do rodapé. */
+.footer-links a.footer-admin {
+  color: var(--on-dark-muted);
+  opacity: 0.75;
+}
+.footer-links a.footer-admin:hover {
+  color: #fff;
+  opacity: 1;
 }
 .contact-actions {
   display: flex;
