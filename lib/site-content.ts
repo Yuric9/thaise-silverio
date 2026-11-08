@@ -69,6 +69,9 @@ export type CoursePhoto = {
   height: number;
 };
 
+/** Foto do topo da página do curso (enviada pelo painel). */
+export type CourseCover = Omit<CoursePhoto, "caption">;
+
 export type CourseContent = {
   published: boolean;
   title: string;
@@ -90,8 +93,8 @@ export type CourseContent = {
   ctaMessage: string;
   /** Fotos da seção "Por dentro do curso" (turma, prática, kit...). */
   photos: CoursePhoto[];
-  /** Foto do topo: chave de uma das `photos`; vazio = foto da Thaise. */
-  heroPhoto: string;
+  /** Foto do topo da página; `null` = a mesma foto da Thaise da página inicial. */
+  cover: CourseCover | null;
 };
 
 export type SiteContent = {
@@ -159,7 +162,7 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     ctaMessage:
       "Olá, Thaise! Vim pelo site e quero me inscrever no Curso de Micropigmentação de Sobrancelhas.",
     photos: [],
-    heroPhoto: "",
+    cover: null,
   },
 };
 

@@ -156,34 +156,24 @@ const coursePhotoSchema = z.object({
   height: z.coerce.number().int().min(1).max(5000),
 });
 
-export const courseSchema = z
-  .object({
-    published: z.boolean(),
-    title: shortText("o nome do curso", 120),
-    subtitle: shortText("a frase de apresentação", 400),
-    audience: z.array(listText("o item de “Para quem é”", 200)).max(10),
-    modules: titledItems("“O que você vai aprender”"),
-    details: titledItems("“Como funciona”"),
-    includes: z.array(listText("o item de “O que está incluso”", 200)).max(12),
-    price: z.string().trim().max(40, "Preço muito longo."),
-    priceNote: z.string().trim().max(160, "Condições muito longas."),
-    faq: faqSchema,
-    ctaMessage: shortText("a mensagem do WhatsApp", 300),
-    photos: z
-      .array(coursePhotoSchema)
-      .max(12, "Use no máximo 12 fotos do curso.")
-      .default([]),
-    heroPhoto: z.string().default(""),
-  })
-  .refine(
-    (course) =>
-      !course.heroPhoto ||
-      course.photos.some((photo) => photo.key === course.heroPhoto),
-    {
-      message: "A foto do topo precisa estar entre as fotos do curso.",
-      path: ["heroPhoto"],
-    },
-  );
+export const courseSchema = z.object({
+  published: z.boolean(),
+  title: shortText("o nome do curso", 120),
+  subtitle: shortText("a frase de apresentação", 400),
+  audience: z.array(listText("o item de “Para quem é”", 200)).max(10),
+  modules: titledItems("“O que você vai aprender”"),
+  details: titledItems("“Como funciona”"),
+  includes: z.array(listText("o item de “O que está incluso”", 200)).max(12),
+  price: z.string().trim().max(40, "Preço muito longo."),
+  priceNote: z.string().trim().max(160, "Condições muito longas."),
+  faq: faqSchema,
+  ctaMessage: shortText("a mensagem do WhatsApp", 300),
+  photos: z
+    .array(coursePhotoSchema)
+    .max(12, "Use no máximo 12 fotos do curso.")
+    .default([]),
+  cover: coursePhotoSchema.omit({ caption: true }).nullable().default(null),
+});
 
 export const contentSchemas = {
   contact: contactSchema,

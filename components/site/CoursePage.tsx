@@ -22,8 +22,8 @@ export default function CoursePage({
   highlights,
 }: Props) {
   const enrollUrl = whatsappLink(whatsappNumber, course.ctaMessage);
-  // Foto do topo: a escolhida no painel ou, se nenhuma, a foto da Thaise.
-  const cover = course.photos.find((photo) => photo.key === course.heroPhoto);
+  // Foto do topo: a enviada no painel ou, se nenhuma, a foto da Thaise.
+  const cover = course.cover;
   const enroll = (label: string, variant = "button-gold") => (
     <a
       className={`button ${variant}`}

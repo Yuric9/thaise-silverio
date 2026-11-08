@@ -101,8 +101,9 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
 - Publicada, ela abre em uma **aba nova** pelo item "Cursos" do menu ou pelo
   botão "Conheça o curso" (`Header` com `course="new-tab"`).
 - Fotos do curso: enviadas em /admin → Curso → Fotos do curso (R2, pasta
-  `course/`, convertidas para WebP sem metadados). Ficam em `course.photos`;
-  `course.heroPhoto` escolhe a foto do topo (vazio = foto da Thaise).
+  `course/`, convertidas para WebP sem metadados). Ficam em `course.photos`.
+  A foto do topo é enviada à parte (`course.cover`); `null` = mesma foto da
+  Thaise da página inicial.
 - Cada seção só aparece quando preenchida. Não invente preço, carga horária,
   certificado ou conteúdo do curso: isso é a Thaise quem informa.
 

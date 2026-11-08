@@ -11,6 +11,7 @@ import { REFRESH } from "../../../lib/client/refresh";
 import { useAction } from "../../../lib/client/use-action";
 import type {
   CourseContent,
+  CourseCover,
   CoursePhoto,
   FaqItem,
   SiteContent,
@@ -137,15 +138,22 @@ function CourseForm({ initial }: { initial: CourseContent }) {
       </Panel>
 
       <Panel
+        title="Foto do topo da página"
+        eyebrow="Para não repetir a foto da página inicial"
+      >
+        <CoverPhoto
+          cover={course.cover}
+          onChange={(cover) => set("cover", cover)}
+        />
+      </Panel>
+
+      <Panel
         title="Fotos do curso"
         eyebrow="Turma, prática, kit, certificado... (até 12)"
       >
         <CoursePhotos
           photos={course.photos}
-          heroPhoto={course.heroPhoto}
-          onChange={(photos, heroPhoto) =>
-            setCourse({ ...course, photos, heroPhoto })
-          }
+          onChange={(photos) => set("photos", photos)}
         />
       </Panel>
 
@@ -454,12 +462,10 @@ const MAX_PHOTOS = 12;
  */
 function CoursePhotos({
   photos,
-  heroPhoto,
   onChange,
 }: {
   photos: CoursePhoto[];
-  heroPhoto: string;
-  onChange: (photos: CoursePhoto[], heroPhoto: string) => void;
+  onChange: (photos: CoursePhoto[]) => void;
 }) {
   const { busy, run } = useAction();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -488,7 +494,7 @@ function CoursePhotos({
       },
     );
     if (fileInput.current) fileInput.current.value = "";
-    if (uploaded) onChange([...photos, ...uploaded], heroPhoto);
+    if (uploaded) onChange([...photos, ...uploaded]);
   }
 
   const update = (key: string, field: "alt" | "caption", value: string) =>
@@ -496,7 +502,6 @@ function CoursePhotos({
       photos.map((photo) =>
         photo.key === key ? { ...photo, [field]: value } : photo,
       ),
-      heroPhoto,
     );
 
   return (
@@ -531,23 +536,13 @@ function CoursePhotos({
                     update(photo.key, "caption", event.target.value)
                   }
                 />
-                <CheckboxField
-                  label="Usar como foto do topo da página"
-                  checked={heroPhoto === photo.key}
-                  onChange={(event) =>
-                    onChange(photos, event.target.checked ? photo.key : "")
-                  }
-                />
                 <div className="gallery-admin__actions">
                   <Button
                     variant="ghost"
                     size="sm"
                     icon="trash"
                     onClick={() =>
-                      onChange(
-                        photos.filter((item) => item.key !== photo.key),
-                        heroPhoto === photo.key ? "" : heroPhoto,
-                      )
+                      onChange(photos.filter((item) => item.key !== photo.key))
                     }
                   >
                     Remover
@@ -560,8 +555,7 @@ function CoursePhotos({
       )}
       {photos.length === 0 && (
         <p className="muted">
-          Sem fotos, a seção “Por dentro do curso” não aparece e o topo da
-          página usa a foto da Thaise.
+          Sem fotos, a seção “Por dentro do curso” não aparece na página.
         </p>
       )}
       {photos.length < MAX_PHOTOS && (
@@ -592,6 +586,89 @@ function CoursePhotos({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Foto do topo da página do curso. Sem foto enviada, usa a mesma foto da Thaise
+ * da página inicial.
+ */
+function CoverPhoto({
+  cover,
+  onChange,
+}: {
+  cover: CourseCover | null;
+  onChange: (cover: CourseCover | null) => void;
+}) {
+  const { busy, run } = useAction();
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  async function choose(file: File | undefined) {
+    if (!file) return;
+    const uploaded = await run(() => uploadGalleryImage(file, "course"), {
+      success:
+        "Foto enviada! Confira a descrição e clique em Salvar para ela aparecer no site.",
+    });
+    if (fileInput.current) fileInput.current.value = "";
+    if (uploaded)
+      onChange({
+        key: uploaded.key,
+        alt: cover?.alt || "Thaise Silvério, instrutora do curso",
+        width: uploaded.width || 1000,
+        height: uploaded.height || 1000,
+      });
+  }
+
+  return (
+    <div className="course-cover-admin">
+      <img
+        src={cover ? imageUrl(cover.key) : "/images/thaise-silverio.webp"}
+        alt={cover?.alt || "Foto atual do topo: Thaise Silvério"}
+        width={cover?.width ?? 900}
+        height={cover?.height ?? 1200}
+      />
+      <div className="stack">
+        <p className="muted">
+          {cover
+            ? "Esta foto aparece só no topo da página do curso."
+            : "Hoje o topo usa a mesma foto da página inicial. Envie outra foto para a página do curso ficar diferente."}
+        </p>
+        {cover && (
+          <TextAreaField
+            label="Descrição da foto"
+            hint="Ex.: Thaise Silvério durante uma aula do curso"
+            rows={2}
+            maxLength={240}
+            value={cover.alt}
+            onChange={(event) =>
+              onChange({ ...cover, alt: event.target.value })
+            }
+          />
+        )}
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+          onChange={(event) => choose(event.target.files?.[0])}
+        />
+        <div className="gallery-admin__actions">
+          <Button
+            variant="secondary"
+            icon="upload"
+            loading={busy}
+            onClick={() => fileInput.current?.click()}
+          >
+            {cover ? "Trocar foto" : "Enviar outra foto"}
+          </Button>
+          {cover && (
+            <Button variant="ghost" onClick={() => onChange(null)}>
+              Voltar para a foto da página inicial
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

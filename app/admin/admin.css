@@ -2977,3 +2977,24 @@ body:has(.admin-scope) {
   align-items: end;
   gap: 8px;
 }
+
+/* Foto do topo da página do curso */
+.admin-scope .course-cover-admin {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.admin-scope .course-cover-admin img {
+  width: 160px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+@media (max-width: 600px) {
+  .admin-scope .course-cover-admin {
+    grid-template-columns: 1fr;
+  }
+}
