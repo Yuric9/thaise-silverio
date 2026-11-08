@@ -19,7 +19,10 @@ export default async function Home() {
   const { contact, texts, highlights, faq } = content;
   return (
     <>
-      <Header showFaq={faq.length > 0} />
+      <Header
+        showFaq={faq.length > 0}
+        course={content.course.published ? "new-tab" : "section"}
+      />
       <main>
         <Hero text={texts.heroText} />
         <About texts={texts} highlights={highlights} />
@@ -32,6 +35,7 @@ export default async function Home() {
         <Courses
           text={texts.coursesText}
           whatsappNumber={contact.whatsappNumber}
+          coursePublished={content.course.published}
         />
         <Faq items={faq} />
         <Contact contact={contact} text={texts.contactText} />

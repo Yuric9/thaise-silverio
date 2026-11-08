@@ -5,10 +5,16 @@ import { RichText } from "./rich-text";
  * Perguntas frequentes. Usa <details>, que abre e fecha sem JavaScript e
  * funciona com teclado e leitores de tela. Sem perguntas, a seção não aparece.
  */
-export default function Faq({ items }: { items: FaqItem[] }) {
+export default function Faq({
+  items,
+  id = "duvidas",
+}: {
+  items: FaqItem[];
+  id?: string;
+}) {
   if (!items.length) return null;
   return (
-    <section className="faq section" id="duvidas">
+    <section className="faq section" id={id}>
       <div className="section-heading">
         <div>
           <p className="eyebrow">TIRE SUAS DÚVIDAS</p>

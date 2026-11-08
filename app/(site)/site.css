@@ -751,6 +751,85 @@ body:has(.site-scope) {
   color: #8a7a5c;
   text-transform: uppercase;
 }
+/* ─── Página do curso (/curso) ─── */
+.site-scope .course-section {
+  background: #fff;
+}
+.site-scope .course-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px 32px;
+  max-width: 980px;
+}
+.site-scope .course-checklist li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.site-scope .course-checklist li > span {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  color: var(--primary);
+  font-size: 13px;
+}
+.site-scope .course-how {
+  display: grid;
+  gap: 64px;
+}
+.site-scope .course-details {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.site-scope .course-details div {
+  padding: 22px 24px;
+  background: var(--cream);
+  border-bottom: 2px solid var(--gold);
+}
+.site-scope .course-details dt {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+.site-scope .course-details dd {
+  margin: 8px 0 0;
+  font:
+    20px/1.35 Georgia,
+    serif;
+  color: var(--primary-deep);
+}
+.site-scope .course-instructor .intro-main h2 em {
+  color: var(--rose);
+}
+.site-scope .course-price {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 24px;
+}
+.site-scope .course-price strong {
+  font:
+    400 clamp(40px, 6vw, 64px)/1 Georgia,
+    serif;
+  color: var(--gold);
+}
+.site-scope .course-price span {
+  font-size: 14px;
+  color: var(--on-dark-muted);
+}
+
 @media (max-width: 900px) {
   .site-scope .header {
     height: auto;
@@ -858,6 +937,11 @@ body:has(.site-scope) {
   }
   .site-scope .hero h1 {
     font-size: 52px;
+  }
+  .site-scope .course-hero h1 {
+    font-size: clamp(34px, 10vw, 44px);
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   .site-scope .hero-art {
     min-height: 340px;

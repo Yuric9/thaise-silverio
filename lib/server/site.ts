@@ -119,11 +119,42 @@ export const faqSchema = z
   )
   .max(12, "Use no máximo 12 perguntas.");
 
+const listText = (label: string, max: number) =>
+  z
+    .string()
+    .trim()
+    .min(1, `Preencha ${label} ou remova a linha.`)
+    .max(max, `${label} muito longo.`);
+const titledItems = (label: string) =>
+  z
+    .array(
+      z.object({
+        title: listText(`o título de ${label}`, 120),
+        text: z.string().trim().max(600, "Texto muito longo."),
+      }),
+    )
+    .max(12, `Use no máximo 12 itens em ${label}.`);
+
+export const courseSchema = z.object({
+  published: z.boolean(),
+  title: shortText("o nome do curso", 120),
+  subtitle: shortText("a frase de apresentação", 400),
+  audience: z.array(listText("o item de “Para quem é”", 200)).max(10),
+  modules: titledItems("“O que você vai aprender”"),
+  details: titledItems("“Como funciona”"),
+  includes: z.array(listText("o item de “O que está incluso”", 200)).max(12),
+  price: z.string().trim().max(40, "Preço muito longo."),
+  priceNote: z.string().trim().max(160, "Condições muito longas."),
+  faq: faqSchema,
+  ctaMessage: shortText("a mensagem do WhatsApp", 300),
+});
+
 export const contentSchemas = {
   contact: contactSchema,
   highlights: highlightsSchema,
   texts: textsSchema,
   faq: faqSchema,
+  course: courseSchema,
 } as const;
 
 // ─── Leitura ─────────────────────────────────────────────────────────────────

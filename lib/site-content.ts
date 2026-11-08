@@ -50,12 +50,42 @@ export type TextsContent = {
 /** Pergunta frequente: a resposta é sempre escrita pela Thaise. */
 export type FaqItem = { question: string; answer: string };
 
+/** Item com título e texto (módulos do curso, "como funciona"...). */
+export type TitledItem = { title: string; text: string };
+
+/**
+ * Página de vendas do curso (/curso). Só vai ao ar quando `published` é
+ * verdadeiro. Listas vazias = a seção correspondente não aparece.
+ * Preço, carga horária, certificado etc. são sempre informados pela Thaise.
+ */
+export type CourseContent = {
+  published: boolean;
+  title: string;
+  subtitle: string;
+  /** Para quem é o curso. */
+  audience: string[];
+  /** O que a aluna vai aprender (módulos). */
+  modules: TitledItem[];
+  /** Como funciona: formato, carga horária, turma, local... */
+  details: TitledItem[];
+  /** O que está incluso (material, kit, certificado...). */
+  includes: string[];
+  /** Preço como deve aparecer (ex.: "R$ 1.500"). Vazio = não mostra preço. */
+  price: string;
+  /** Condições (ex.: "em até 10x no cartão"). */
+  priceNote: string;
+  faq: FaqItem[];
+  /** Mensagem que já vai escrita no WhatsApp ao clicar em "Quero me inscrever". */
+  ctaMessage: string;
+};
+
 export type SiteContent = {
   contact: ContactContent;
   highlights: Highlight[];
   texts: TextsContent;
   /** Vazio = a seção "Perguntas frequentes" não aparece no site. */
   faq: FaqItem[];
+  course: CourseContent;
 };
 
 export const DEFAULT_SITE_CONTENT: SiteContent = {
@@ -99,6 +129,21 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
       "Entre em contato para tirar dúvidas, conhecer os procedimentos e consultar horários disponíveis.",
   },
   faq: [],
+  course: {
+    published: false,
+    title: "Curso de Micropigmentação de Sobrancelhas",
+    subtitle:
+      "Formação e aperfeiçoamento em micropigmentação, com foco em técnica, segurança e evolução profissional.",
+    audience: [],
+    modules: [],
+    details: [],
+    includes: [],
+    price: "",
+    priceNote: "",
+    faq: [],
+    ctaMessage:
+      "Olá, Thaise! Vim pelo site e quero me inscrever no Curso de Micropigmentação de Sobrancelhas.",
+  },
 };
 
 export const SITE_CONTENT_KEYS = [
@@ -106,6 +151,7 @@ export const SITE_CONTENT_KEYS = [
   "highlights",
   "texts",
   "faq",
+  "course",
 ] as const;
 
 /**
