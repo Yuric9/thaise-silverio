@@ -2963,3 +2963,9 @@ fieldset {
     grid-template-columns: 160px 1fr;
   }
 }
+
+/* Perguntas frequentes: separa cada pergunta da próxima. */
+.faq-admin__item {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}

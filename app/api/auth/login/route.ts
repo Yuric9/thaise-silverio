@@ -75,15 +75,13 @@ export async function POST(request: Request) {
 
     const now = new Date().toISOString();
     if (!account) {
-      await db
-        .insert(accounts)
-        .values({
-          email,
-          passwordHash: await hashPassword(password),
-          role: ADMIN_ROLE,
-          active: true,
-          createdAt: now,
-        });
+      await db.insert(accounts).values({
+        email,
+        passwordHash: await hashPassword(password),
+        role: ADMIN_ROLE,
+        active: true,
+        createdAt: now,
+      });
     } else if (
       account.role !== ADMIN_ROLE ||
       !account.active ||

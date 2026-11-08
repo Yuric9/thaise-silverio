@@ -1,6 +1,7 @@
 import About from "@/components/site/About";
 import Contact from "@/components/site/Contact";
 import Courses from "@/components/site/Courses";
+import Faq from "@/components/site/Faq";
 import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
 import Hero from "@/components/site/Hero";
@@ -14,10 +15,10 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const { content, services, gallery } = await getPublicSite();
-  const { contact, texts, highlights } = content;
+  const { contact, texts, highlights, faq } = content;
   return (
     <>
-      <Header />
+      <Header showFaq={faq.length > 0} />
       <main>
         <Hero text={texts.heroText} />
         <About texts={texts} highlights={highlights} />
@@ -31,6 +32,7 @@ export default async function Home() {
           text={texts.coursesText}
           whatsappNumber={contact.whatsappNumber}
         />
+        <Faq items={faq} />
         <Contact contact={contact} text={texts.contactText} />
       </main>
       <Footer contact={contact} />

@@ -15,8 +15,12 @@ const LINKS = [
  * Cabeçalho do site. No computador o menu fica sempre à mostra; no celular
  * (até 900px) ele se recolhe no botão "Menu" (hambúrguer).
  */
-export default function Header() {
+export default function Header({ showFaq = false }: { showFaq?: boolean }) {
   const [open, setOpen] = useState(false);
+  // "Dúvidas" só entra no menu quando há perguntas frequentes no site.
+  const links = showFaq
+    ? [...LINKS.slice(0, 5), { href: "#duvidas", label: "Dúvidas" }, LINKS[5]]
+    : LINKS;
 
   // Fecha o menu com a tecla Esc.
   useEffect(() => {
@@ -43,7 +47,7 @@ export default function Header() {
           />
         </a>
         <nav id="menu-principal" aria-label="Menu principal">
-          {LINKS.map((link) => (
+          {links.map((link) => (
             <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
               {link.label}
             </a>
