@@ -17,6 +17,17 @@ export type ContactContent = {
   whatsappDisplay: string;
   /** Sem o @ (ex.: thaisesilverio_estetica). */
   instagramHandle: string;
+  /** Nome do estúdio, como no perfil do Google. */
+  studioName: string;
+  /** Rua e número (ex.: R. Ibirapuera). Vazio = o endereço não aparece. */
+  street: string;
+  neighborhood: string;
+  city: string;
+  /** Sigla do estado (ex.: GO). */
+  state: string;
+  postalCode: string;
+  /** Link "Escreva uma avaliação" do perfil no Google (opcional). */
+  googleReviewUrl: string;
 };
 
 export type Highlight = { value: string; label: string };
@@ -52,6 +63,14 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     whatsappNumber: "556281231427",
     whatsappDisplay: "(62) 8123-1427",
     instagramHandle: "thaisesilverio_estetica",
+    // Dados do perfil "Studio Thaise Silvério" no Google, informados pela dona.
+    studioName: "Studio Thaise Silvério",
+    street: "R. Ibirapuera",
+    neighborhood: "Jardim Marista",
+    city: "Trindade",
+    state: "GO",
+    postalCode: "75383-414",
+    googleReviewUrl: "",
   },
   highlights: [
     { value: "+500", label: "clientes atendidas" },
@@ -110,6 +129,22 @@ export function whatsappLink(number: string, message: string): string {
 
 export function instagramUrl(handle: string) {
   return `https://www.instagram.com/${handle}/`;
+}
+
+/** Endereço em uma linha, só com as partes preenchidas. */
+export function addressLine(contact: ContactContent) {
+  const cityState = [contact.city, contact.state].filter(Boolean).join(" – ");
+  return [contact.street, contact.neighborhood, cityState]
+    .filter(Boolean)
+    .join(", ");
+}
+
+/** Link do Google Maps para o estúdio (abre o app de mapas no celular). */
+export function mapsUrl(contact: ContactContent) {
+  const query = [contact.studioName, addressLine(contact), contact.postalCode]
+    .filter(Boolean)
+    .join(", ");
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
 /** Item da galeria como o site e o painel recebem. */

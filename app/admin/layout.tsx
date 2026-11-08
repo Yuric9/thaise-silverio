@@ -25,5 +25,6 @@ export const metadata: Metadata = {
 export default function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  // Isola o CSS do painel (o build junta o CSS do site e do painel num arquivo só).
+  return <div className="admin-scope">{children}</div>;
 }

@@ -11,6 +11,7 @@ import { REFRESH } from "../../../lib/client/refresh";
 import { useAction } from "../../../lib/client/use-action";
 import {
   FAQ_SUGGESTIONS,
+  mapsUrl,
   type ContactContent,
   type FaqItem,
   type GalleryItem,
@@ -484,7 +485,7 @@ function ContactForm({ contact }: { contact: ContactContent }) {
   }
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={submit} className="stack">
       <Panel
         title="WhatsApp e Instagram"
         eyebrow="Usados em todos os botões do site"
@@ -526,6 +527,88 @@ function ContactForm({ contact }: { contact: ContactContent }) {
               <span>Testar o link do WhatsApp</span>
             </a>
           </div>
+        </div>
+      </Panel>
+
+      <Panel
+        title="Endereço do estúdio"
+        eyebrow="Aparece no Contato, com o botão “Como chegar”"
+      >
+        <div className="form-grid">
+          <TextField
+            className="form-grid__full"
+            label="Nome do estúdio"
+            maxLength={80}
+            value={form.studioName}
+            onChange={(event) =>
+              setForm({ ...form, studioName: event.target.value })
+            }
+          />
+          <TextField
+            label="Rua e número"
+            hint="Deixe em branco para não mostrar o endereço no site."
+            maxLength={120}
+            value={form.street}
+            onChange={(event) =>
+              setForm({ ...form, street: event.target.value })
+            }
+          />
+          <TextField
+            label="Bairro"
+            maxLength={80}
+            value={form.neighborhood}
+            onChange={(event) =>
+              setForm({ ...form, neighborhood: event.target.value })
+            }
+          />
+          <TextField
+            label="Cidade"
+            maxLength={80}
+            value={form.city}
+            onChange={(event) => setForm({ ...form, city: event.target.value })}
+          />
+          <TextField
+            label="Estado (sigla)"
+            maxLength={2}
+            value={form.state}
+            onChange={(event) =>
+              setForm({ ...form, state: event.target.value })
+            }
+          />
+          <TextField
+            label="CEP"
+            inputMode="numeric"
+            maxLength={9}
+            value={form.postalCode}
+            onChange={(event) =>
+              setForm({ ...form, postalCode: event.target.value })
+            }
+          />
+          <div className="form-grid__full">
+            <a
+              className="button button--ghost button--sm"
+              href={mapsUrl(form)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Conferir no Google Maps</span>
+            </a>
+          </div>
+        </div>
+      </Panel>
+
+      <Panel title="Avaliações no Google" eyebrow="Opcional">
+        <div className="form-grid">
+          <TextField
+            className="form-grid__full"
+            label="Link para avaliar no Google"
+            placeholder="https://g.page/r/..."
+            hint="No perfil do Google da empresa, toque em “Pedir avaliações” e copie o link. Com ele, a mensagem de Pós-atendimento do Remarketing pede uma avaliação."
+            value={form.googleReviewUrl}
+            onChange={(event) =>
+              setForm({ ...form, googleReviewUrl: event.target.value })
+            }
+          />
         </div>
         <div className="form-actions">
           <Button type="submit" icon="check" loading={busy}>

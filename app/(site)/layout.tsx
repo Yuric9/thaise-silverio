@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./site.css";
 
-const title = "Thaise Silvério | Micropigmentação e Estética";
+const title = "Thaise Silvério | Micropigmentação e Estética em Trindade – GO";
 const description =
-  "Realce sua beleza com naturalidade. Micropigmentação, design de sobrancelhas, Hidralips e cursos.";
+  "Studio Thaise Silvério, em Trindade (GO): micropigmentação de sobrancelhas e lábios, design de sobrancelhas, Hidralips e cursos.";
 
 export const metadata: Metadata = {
   title,
@@ -36,5 +36,6 @@ export const metadata: Metadata = {
 export default function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  // Isola o CSS do site (o build junta o CSS do site e do painel num arquivo só).
+  return <div className="site-scope">{children}</div>;
 }

@@ -12,7 +12,11 @@ export default function Footer({ contact }: { contact: ContactContent }) {
           loading="lazy"
         />
       </a>
-      <span>MICROPIGMENTAÇÃO E ESTÉTICA</span>
+      <span>
+        MICROPIGMENTAÇÃO E ESTÉTICA
+        {contact.city &&
+          ` · ${contact.city.toUpperCase()}${contact.state ? ` – ${contact.state}` : ""}`}
+      </span>
       <span>
         © {new Date().getFullYear()} Thaise Silvério. Todos os direitos
         reservados.

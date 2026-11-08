@@ -1,6 +1,8 @@
 import { RichText } from "./rich-text";
 import {
+  addressLine,
   instagramUrl,
+  mapsUrl,
   whatsappLink,
   type ContactContent,
 } from "@/lib/site-content";
@@ -50,6 +52,22 @@ export default function Contact({
         <small>
           WhatsApp {contact.whatsappDisplay} · @{contact.instagramHandle}
         </small>
+        {addressLine(contact) && (
+          <address className="contact-address">
+            <strong>{contact.studioName || "Endereço"}</strong>
+            <span>
+              {addressLine(contact)}
+              {contact.postalCode && ` · CEP ${contact.postalCode}`}
+            </span>
+            <a
+              href={mapsUrl(contact)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Como chegar <span aria-hidden="true">↗</span>
+            </a>
+          </address>
+        )}
       </div>
     </section>
   );
