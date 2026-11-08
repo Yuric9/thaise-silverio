@@ -90,5 +90,4 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
   com prints autorizados do Instagram/WhatsApp. A dona não considera prioridade
   agora, mas aceita que seja implementado no futuro.
 - **Perguntas frequentes:** "Dói?", "Quanto tempo dura?", "Cuidados pós".
-- **Menu hambúrguer no celular** (hoje os links só quebram de linha).
 - **Domínio próprio** (ex.: thaisesilverio.com.br) apontando para a Cloudflare.
