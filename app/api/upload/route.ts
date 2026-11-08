@@ -9,9 +9,9 @@ const ALLOWED_TYPES = new Map([
   ["image/webp", "webp"],
 ]);
 /** Somente imagens enviadas pelo sistema podem ser lidas. */
-const IMAGE_KEY = /^(catalog|gallery)\/[0-9a-f-]{36}\.(jpg|png|webp)$/;
-/** Pastas aceitas: produtos (`catalog`) e galeria do site (`gallery`). */
-const FOLDERS = new Set(["catalog", "gallery"]);
+const IMAGE_KEY = /^(catalog|gallery|course)\/[0-9a-f-]{36}\.(jpg|png|webp)$/;
+/** Pastas aceitas: produtos (`catalog`), galeria (`gallery`) e curso (`course`). */
+const FOLDERS = new Set(["catalog", "gallery", "course"]);
 
 function bucket() {
   const binding = (globalThis as typeof globalThis & { __TS_BUCKET?: R2Bucket })

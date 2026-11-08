@@ -135,6 +135,27 @@ const titledItems = (label: string) =>
     )
     .max(12, `Use no máximo 12 itens em ${label}.`);
 
+/** Foto do curso: só imagens enviadas pelo painel (pasta `course/` do R2). */
+const coursePhotoSchema = z.object({
+  key: z
+    .string()
+    .regex(
+      /^course\/[0-9a-f-]{36}\.(jpg|png|webp)$/,
+      "Envie a foto do curso novamente.",
+    ),
+  alt: z
+    .string()
+    .trim()
+    .min(
+      10,
+      "Descreva cada foto do curso em pelo menos 10 letras (ajuda quem usa leitor de tela e o Google).",
+    )
+    .max(240, "Descrição da foto muito longa."),
+  caption: z.string().trim().max(80, "Legenda da foto muito longa."),
+  width: z.coerce.number().int().min(1).max(5000),
+  height: z.coerce.number().int().min(1).max(5000),
+});
+
 export const courseSchema = z.object({
   published: z.boolean(),
   title: shortText("o nome do curso", 120),
@@ -147,6 +168,11 @@ export const courseSchema = z.object({
   priceNote: z.string().trim().max(160, "Condições muito longas."),
   faq: faqSchema,
   ctaMessage: shortText("a mensagem do WhatsApp", 300),
+  photos: z
+    .array(coursePhotoSchema)
+    .max(12, "Use no máximo 12 fotos do curso.")
+    .default([]),
+  cover: coursePhotoSchema.omit({ caption: true }).nullable().default(null),
 });
 
 export const contentSchemas = {
