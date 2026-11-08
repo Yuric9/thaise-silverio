@@ -106,3 +106,17 @@ test("só imagens enviadas pelo sistema podem ser lidas", async () => {
   const response = await request("/api/upload?key=../segredo.txt");
   assert.equal(response.status, 400);
 });
+
+test("a verificação do login nunca mostra os segredos", async () => {
+  const response = await request("/api/auth/check");
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.deepEqual(Object.keys(body).sort(), [
+    "emailConfigurado",
+    "emailPareceValido",
+    "formatoDaSenhaCorreto",
+    "senhaConfigurada",
+  ]);
+  for (const value of Object.values(body))
+    assert.equal(typeof value, "boolean");
+});
