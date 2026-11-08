@@ -98,6 +98,8 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
   /admin → Curso (chave `course` do conteúdo). Componente `components/site/CoursePage.tsx`.
 - Só existe (e só entra no sitemap) quando `published` estiver marcado; até lá o
   botão "Conheça o curso" da página inicial continua indo para o WhatsApp.
+- Publicada, ela abre em uma **aba nova** pelo item "Cursos" do menu ou pelo
+  botão "Conheça o curso" (`Header` com `course="new-tab"`).
 - Cada seção só aparece quando preenchida. Não invente preço, carga horária,
   certificado ou conteúdo do curso: isso é a Thaise quem informa.
 

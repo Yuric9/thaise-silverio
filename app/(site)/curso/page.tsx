@@ -51,7 +51,7 @@ export default async function CursoPage() {
 
   return (
     <>
-      <Header base="/" />
+      <Header base="/" course="current" />
       <main>
         <CoursePage
           course={course}
