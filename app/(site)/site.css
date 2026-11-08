@@ -93,6 +93,55 @@ a {
   background: var(--gold);
   color: var(--primary-darkest);
 }
+/* Botão do menu (hambúrguer): só aparece no celular e no tablet. */
+.menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(233, 199, 125, 0.5);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  place-items: center;
+}
+.menu-toggle__icon,
+.menu-toggle__icon::before,
+.menu-toggle__icon::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+}
+.menu-toggle__icon {
+  position: relative;
+}
+.menu-toggle__icon::before,
+.menu-toggle__icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+.menu-toggle__icon::before {
+  top: -6px;
+}
+.menu-toggle__icon::after {
+  top: 6px;
+}
+/* Aberto: as três linhas viram um X. */
+.header.is-open .menu-toggle__icon {
+  background: transparent;
+}
+.header.is-open .menu-toggle__icon::before {
+  transform: translateY(6px) rotate(45deg);
+}
+.header.is-open .menu-toggle__icon::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
 .header-cta span,
 .button span {
   margin-left: 15px;
@@ -614,13 +663,32 @@ footer > span:nth-child(2) {
     min-height: 80px;
     flex-wrap: wrap;
   }
+  .header {
+    gap: 12px;
+  }
+  .header-cta {
+    margin-left: auto;
+  }
+  .menu-toggle {
+    display: grid;
+  }
+  /* Menu recolhido: aparece só quando o botão é tocado. */
   .header nav {
-    order: 3;
+    display: none;
+    order: 4;
     width: 100%;
-    justify-content: center;
-    gap: 18px;
-    padding: 12px 0;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0;
+    padding: 4px 0 12px;
+    border-top: 1px solid rgba(233, 199, 125, 0.15);
+  }
+  .header.is-open nav {
+    display: flex;
+  }
+  .header nav a {
+    padding: 14px 4px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(233, 199, 125, 0.1);
   }
   .hero {
     padding: 65px 7%;
@@ -681,10 +749,7 @@ footer > span:nth-child(2) {
     padding: 11px;
     font-size: 10px;
   }
-  .header nav {
-    gap: 14px;
-    font-size: 10px;
-  }
+
   .hero {
     display: block;
     padding: 70px 7% 75px;

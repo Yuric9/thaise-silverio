@@ -1,12 +1,40 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+const LINKS = [
+  { href: "#inicio", label: "Início" },
+  { href: "#sobre", label: "Sobre" },
+  { href: "#procedimentos", label: "Procedimentos" },
+  { href: "#resultados", label: "Resultados" },
+  { href: "#cursos", label: "Cursos" },
+  { href: "#contato", label: "Contato" },
+];
+
+/**
+ * Cabeçalho do site. No computador o menu fica sempre à mostra; no celular
+ * (até 900px) ele se recolhe no botão "Menu" (hambúrguer).
+ */
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
+  // Fecha o menu com a tecla Esc.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) =>
+      event.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <>
       <div className="topline">
         <span>BELEZA • PRECISÃO • NATURALIDADE</span>
         <span>ATENDIMENTO COM HORA MARCADA</span>
       </div>
-      <header className="header">
-        <a href="#inicio" className="brand">
+      <header className={`header ${open ? "is-open" : ""}`.trim()}>
+        <a href="#inicio" className="brand" onClick={() => setOpen(false)}>
           <img
             src="/images/logo-monograma.webp"
             alt="Thaise Silvério — Micropigmentação e Estética"
@@ -14,17 +42,30 @@ export default function Header() {
             height={144}
           />
         </a>
-        <nav aria-label="Menu principal">
-          <a href="#inicio">Início</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#procedimentos">Procedimentos</a>
-          <a href="#resultados">Resultados</a>
-          <a href="#cursos">Cursos</a>
-          <a href="#contato">Contato</a>
+        <nav id="menu-principal" aria-label="Menu principal">
+          {LINKS.map((link) => (
+            <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+              {link.label}
+            </a>
+          ))}
         </nav>
-        <a className="header-cta" href="#contato">
+        <a
+          className="header-cta"
+          href="#contato"
+          onClick={() => setOpen(false)}
+        >
           Agendar avaliação <span aria-hidden="true">↗</span>
         </a>
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-expanded={open}
+          aria-controls="menu-principal"
+          onClick={() => setOpen(!open)}
+        >
+          <span className="menu-toggle__icon" aria-hidden="true" />
+          <span className="sr-only">{open ? "Fechar menu" : "Abrir menu"}</span>
+        </button>
       </header>
     </>
   );
