@@ -24,8 +24,14 @@ export default function Courses({
           <RichText text={text} />
         </p>
         {coursePublished ? (
-          <a className="button button-outline" href="/curso">
-            Conheça o curso <span aria-hidden="true">→</span>
+          <a
+            className="button button-outline"
+            href="/curso"
+            target="_blank"
+            rel="noopener"
+            aria-label="Conheça o curso (abre em uma nova aba)"
+          >
+            Conheça o curso <span aria-hidden="true">↗</span>
           </a>
         ) : (
           <a
