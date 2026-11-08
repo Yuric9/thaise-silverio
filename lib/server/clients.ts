@@ -133,15 +133,13 @@ export async function upsertClientByPhone(
     };
   }
   const email = clientEmailForPhone(input.phone);
-  await db
-    .insert(profiles)
-    .values({
-      email,
-      name: input.name,
-      phone: input.phone,
-      birthDate: input.birthDate ?? "",
-      createdAt: now,
-    });
+  await db.insert(profiles).values({
+    email,
+    name: input.name,
+    phone: input.phone,
+    birthDate: input.birthDate ?? "",
+    createdAt: now,
+  });
   return { email, name: input.name, phone: input.phone, created: true };
 }
 

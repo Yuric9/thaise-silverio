@@ -45,9 +45,7 @@ type Campaign =
 const firstName = (client: ClientSummary) => client.name.split(" ")[0];
 
 /** Campanhas: quem entra em cada lista e qual mensagem enviar. */
-function campaigns(
-  instagram: string,
-): Record<
+function campaigns(instagram: string): Record<
   Campaign,
   {
     label: string;

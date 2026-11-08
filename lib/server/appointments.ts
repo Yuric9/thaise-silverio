@@ -120,17 +120,15 @@ export async function createAppointment(
   const now = new Date().toISOString();
   const reservationId = crypto.randomUUID();
   try {
-    await db
-      .insert(appointmentSlots)
-      .values(
-        slotsCovered(input.time, durationMin).map((time) => ({
-          date: input.date,
-          time,
-          resourceKey: STUDIO,
-          reservationId,
-          createdAt: now,
-        })),
-      );
+    await db.insert(appointmentSlots).values(
+      slotsCovered(input.time, durationMin).map((time) => ({
+        date: input.date,
+        time,
+        resourceKey: STUDIO,
+        reservationId,
+        createdAt: now,
+      })),
+    );
   } catch {
     throw new ApiError(
       409,

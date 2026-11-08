@@ -107,16 +107,7 @@ test("só imagens enviadas pelo sistema podem ser lidas", async () => {
   assert.equal(response.status, 400);
 });
 
-test("a verificação do login nunca mostra os segredos", async () => {
+test("a página de verificação do login foi removida", async () => {
   const response = await request("/api/auth/check");
-  assert.equal(response.status, 200);
-  const body = await response.json();
-  assert.deepEqual(Object.keys(body).sort(), [
-    "emailConfigurado",
-    "emailPareceValido",
-    "formatoDaSenhaCorreto",
-    "senhaConfigurada",
-  ]);
-  for (const value of Object.values(body))
-    assert.equal(typeof value, "boolean");
+  assert.equal(response.status, 404);
 });

@@ -78,6 +78,13 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
 - Preços e durações dos procedimentos vieram como "a definir" e o horário de
   atendimento veio com um padrão: a Thaise precisa ajustar no painel.
 
+## Perguntas frequentes
+
+- Editáveis em /admin → Site → Perguntas frequentes (chave `faq` do conteúdo).
+- As respostas são escritas pela Thaise: não preencha respostas sobre
+  procedimentos ou saúde. `FAQ_SUGGESTIONS` traz só perguntas sugeridas.
+- Sem perguntas salvas, a seção e o link "Dúvidas" do menu não aparecem.
+
 ## Ideias para o futuro (ainda não implementadas)
 
 - **Cidade/endereço de atendimento** na bio e no contato (melhora o SEO local).
@@ -89,5 +96,5 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
 - **Depoimentos de clientes (prova social):** seção "O que dizem as clientes"
   com prints autorizados do Instagram/WhatsApp. A dona não considera prioridade
   agora, mas aceita que seja implementado no futuro.
-- **Perguntas frequentes:** "Dói?", "Quanto tempo dura?", "Cuidados pós".
-- **Domínio próprio** (ex.: thaisesilverio.com.br) apontando para a Cloudflare.
+- **Domínio próprio** (ex.: thaisesilverio.com.br): a dona decidiu **não
+  configurar por enquanto**; o site fica no endereço `.workers.dev`.

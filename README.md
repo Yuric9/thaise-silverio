@@ -185,7 +185,6 @@ pode ser desconectado do GitHub ou excluído quando o novo endereço estiver em 
 
 - Cidade e endereço de atendimento (melhora a busca local no Google).
 - Técnicas de micropigmentação que a profissional domina.
-- Perguntas frequentes ("Dói?", "Quanto tempo dura?", "Quais os cuidados depois?").
 - Domínio próprio.
 - Depoimentos de clientes.
 

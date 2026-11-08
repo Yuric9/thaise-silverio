@@ -9,12 +9,14 @@ import {
 } from "../../../lib/client/api";
 import { REFRESH } from "../../../lib/client/refresh";
 import { useAction } from "../../../lib/client/use-action";
-import type {
-  ContactContent,
-  GalleryItem,
-  Highlight,
-  SiteContent,
-  TextsContent,
+import {
+  FAQ_SUGGESTIONS,
+  type ContactContent,
+  type FaqItem,
+  type GalleryItem,
+  type Highlight,
+  type SiteContent,
+  type TextsContent,
 } from "../../../lib/site-content";
 import { Button } from "../../ui/button";
 import { Alert, AsyncContent, EmptyState } from "../../ui/feedback";
@@ -23,7 +25,7 @@ import { Badge, PageHeader, Panel, Tabs } from "../../ui/layout";
 import { Modal } from "../../ui/modal";
 
 type SiteData = { content: SiteContent; gallery: GalleryItem[] };
-type Tab = "textos" | "galeria" | "destaques" | "contatos";
+type Tab = "textos" | "galeria" | "destaques" | "duvidas" | "contatos";
 
 /** Tela "Site": edita o que aparece na página pública, sem mexer em código. */
 export default function SiteSection() {
@@ -59,6 +61,11 @@ export default function SiteSection() {
             count: site.data?.gallery.length,
           },
           { value: "destaques", label: "Destaques" },
+          {
+            value: "duvidas",
+            label: "Perguntas frequentes",
+            count: site.data?.content.faq.length,
+          },
           { value: "contatos", label: "Contatos" },
         ]}
       />
@@ -77,6 +84,9 @@ export default function SiteSection() {
                 key={JSON.stringify(content.highlights)}
                 highlights={content.highlights}
               />
+            )}
+            {tab === "duvidas" && (
+              <FaqForm key={JSON.stringify(content.faq)} items={content.faq} />
             )}
             {tab === "contatos" && (
               <ContactForm
@@ -304,6 +314,153 @@ function HighlightsForm({ highlights }: { highlights: Highlight[] }) {
             )}
             <Button type="submit" icon="check" loading={busy}>
               Salvar destaques
+            </Button>
+          </div>
+        </div>
+      </Panel>
+    </form>
+  );
+}
+
+// ─── Perguntas frequentes ────────────────────────────────────────────────────
+
+function FaqForm({ items: initial }: { items: FaqItem[] }) {
+  const { busy, save } = useSaveContent();
+  const [items, setItems] = useState(initial);
+  const update = (index: number, field: keyof FaqItem, value: string) =>
+    setItems(
+      items.map((item, position) =>
+        position === index ? { ...item, [field]: value } : item,
+      ),
+    );
+  const move = (index: number, step: number) => {
+    const target = index + step;
+    if (target < 0 || target >= items.length) return;
+    const next = [...items];
+    [next[index], next[target]] = [next[target], next[index]];
+    setItems(next);
+  };
+  const unused = FAQ_SUGGESTIONS.filter(
+    (question) => !items.some((item) => item.question === question),
+  );
+
+  function submit(event: FormEvent) {
+    event.preventDefault();
+    save(
+      "faq",
+      items.map((item) => ({
+        question: item.question.trim(),
+        answer: item.answer.trim(),
+      })),
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="stack">
+      <Alert tone="info">
+        A seção “Perguntas frequentes” só aparece no site quando houver pelo
+        menos uma pergunta salva. Escreva as respostas com as suas palavras: são
+        informações sobre o procedimento e a saúde das clientes.
+      </Alert>
+      <Panel title="Perguntas e respostas" eyebrow={`${items.length} de 12`}>
+        <div className="stack">
+          {items.length === 0 && (
+            <p className="muted">
+              Nenhuma pergunta ainda. Use as sugestões abaixo ou escreva a sua.
+            </p>
+          )}
+          {items.map((item, index) => (
+            <div key={index} className="form-grid faq-admin__item">
+              <TextField
+                className="form-grid__full"
+                label={`Pergunta ${index + 1}`}
+                maxLength={160}
+                value={item.question}
+                onChange={(event) =>
+                  update(index, "question", event.target.value)
+                }
+              />
+              <TextAreaField
+                className="form-grid__full"
+                label="Resposta"
+                rows={4}
+                maxLength={800}
+                placeholder="Escreva a resposta com as suas palavras."
+                value={item.answer}
+                onChange={(event) =>
+                  update(index, "answer", event.target.value)
+                }
+              />
+              <div className="form-grid__full gallery-admin__actions">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={index === 0}
+                  onClick={() => move(index, -1)}
+                >
+                  ↑ Subir
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={index === items.length - 1}
+                  onClick={() => move(index, 1)}
+                >
+                  ↓ Descer
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  icon="trash"
+                  onClick={() =>
+                    setItems(items.filter((_, position) => position !== index))
+                  }
+                >
+                  Remover
+                </Button>
+              </div>
+            </div>
+          ))}
+          {items.length < 12 && (
+            <div className="stack">
+              {unused.length > 0 && (
+                <div>
+                  <p className="muted">
+                    Sugestões de perguntas (a resposta é você quem escreve):
+                  </p>
+                  <div className="gallery-admin__actions">
+                    {unused.map((question) => (
+                      <Button
+                        key={question}
+                        variant="secondary"
+                        size="sm"
+                        icon="plus"
+                        onClick={() =>
+                          setItems([...items, { question, answer: "" }])
+                        }
+                      >
+                        {question}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div>
+                <Button
+                  variant="secondary"
+                  icon="plus"
+                  onClick={() =>
+                    setItems([...items, { question: "", answer: "" }])
+                  }
+                >
+                  Escrever outra pergunta
+                </Button>
+              </div>
+            </div>
+          )}
+          <div className="form-actions">
+            <Button type="submit" icon="check" loading={busy}>
+              Salvar perguntas
             </Button>
           </div>
         </div>

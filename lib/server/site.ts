@@ -74,10 +74,20 @@ export const textsSchema = z.object({
   contactText: shortText("o texto do contato", 300),
 });
 
+export const faqSchema = z
+  .array(
+    z.object({
+      question: shortText("a pergunta", 160),
+      answer: shortText("a resposta (ou remova a pergunta)", 800),
+    }),
+  )
+  .max(12, "Use no máximo 12 perguntas.");
+
 export const contentSchemas = {
   contact: contactSchema,
   highlights: highlightsSchema,
   texts: textsSchema,
+  faq: faqSchema,
 } as const;
 
 // ─── Leitura ─────────────────────────────────────────────────────────────────
@@ -95,15 +105,13 @@ export async function ensureSiteSeed(db: Database) {
     .limit(1);
   if (!anyPhoto) {
     const now = new Date().toISOString();
-    await db
-      .insert(galleryItems)
-      .values(
-        DEFAULT_GALLERY.map((item, index) => ({
-          ...item,
-          sortOrder: index + 1,
-          createdAt: now,
-        })),
-      );
+    await db.insert(galleryItems).values(
+      DEFAULT_GALLERY.map((item, index) => ({
+        ...item,
+        sortOrder: index + 1,
+        createdAt: now,
+      })),
+    );
   }
 }
 

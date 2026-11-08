@@ -36,10 +36,15 @@ export type TextsContent = {
   contactText: string;
 };
 
+/** Pergunta frequente: a resposta é sempre escrita pela Thaise. */
+export type FaqItem = { question: string; answer: string };
+
 export type SiteContent = {
   contact: ContactContent;
   highlights: Highlight[];
   texts: TextsContent;
+  /** Vazio = a seção "Perguntas frequentes" não aparece no site. */
+  faq: FaqItem[];
 };
 
 export const DEFAULT_SITE_CONTENT: SiteContent = {
@@ -74,9 +79,28 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     contactText:
       "Entre em contato para tirar dúvidas, conhecer os procedimentos e consultar horários disponíveis.",
   },
+  faq: [],
 };
 
-export const SITE_CONTENT_KEYS = ["contact", "highlights", "texts"] as const;
+export const SITE_CONTENT_KEYS = [
+  "contact",
+  "highlights",
+  "texts",
+  "faq",
+] as const;
+
+/**
+ * Perguntas sugeridas no painel (só a pergunta; a resposta fica em branco
+ * para a Thaise escrever). Não aparecem no site até serem respondidas.
+ */
+export const FAQ_SUGGESTIONS = [
+  "A micropigmentação dói?",
+  "Quanto tempo dura a micropigmentação?",
+  "Quais são os cuidados depois do procedimento?",
+  "Quando é feito o retoque?",
+  "Quem não pode fazer micropigmentação?",
+  "Quanto tempo leva o atendimento?",
+];
 export type SiteContentKey = (typeof SITE_CONTENT_KEYS)[number];
 
 /** Monta um link do WhatsApp que já abre a conversa com a mensagem escrita. */
