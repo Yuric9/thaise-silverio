@@ -51,6 +51,7 @@ aceita (só no teste local).
   `app/admin/admin.css` com `.admin-scope` (as variáveis ficam em
   `:root:has(.site-scope)` / `:root:has(.admin-scope)`). Ao criar regras novas,
   use o prefixo ou rode `node scripts/scope-css.mjs <arquivo> <.classe>`.
+  O script pode ser rodado de novo sem estragar nada (há teste em `tests/css.test.mjs`).
 - Links de WhatsApp do site: `whatsappLink(numero, mensagem)` de
   `lib/site-content.ts`, com o número vindo do conteúdo salvo (`contact`).
   Nunca escreva o número fixo em componentes.
@@ -106,6 +107,17 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
   Thaise da página inicial.
 - Cada seção só aparece quando preenchida. Não invente preço, carga horária,
   certificado ou conteúdo do curso: isso é a Thaise quem informa.
+
+## Efeitos do site
+
+- `components/site/Effects.tsx` (no layout do site): seções surgem ao rolar,
+  números dos destaques contam (`lib/domain/counter.ts`, aceita "+1.000"),
+  linha dourada dos títulos pequenos e foto da galeria ampliada ao clicar.
+  Zoom nas fotos, cards que sobem e brilho dos botões dourados ficam no CSS.
+- O que está na tela ao abrir aparece na hora; sem JavaScript nada fica escondido.
+- Respeite `prefers-reduced-motion`: quem pede menos movimento vê tudo parado.
+- A dona **não quis**: topo fixo ao rolar, botão flutuante do WhatsApp e
+  "antes e depois" com barra deslizante.
 
 ## Ideias para o futuro (ainda não implementadas)
 

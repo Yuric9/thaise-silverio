@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { counterText, parseCounter } from "../lib/domain/counter.ts";
 import {
   isMaintenanceDue,
   isTouchUpDue,
@@ -105,4 +106,26 @@ test("endereço e link do Google Maps do estúdio", async () => {
     }),
     "",
   );
+});
+
+test("contagem dos destaques: lê o número salvo no painel", () => {
+  assert.deepEqual(parseCounter("+500"), {
+    before: "+",
+    after: "",
+    end: 500,
+    grouped: false,
+  });
+  assert.equal(parseCounter("6 anos")?.end, 6);
+  assert.equal(parseCounter("+1.000")?.end, 1000);
+  assert.equal(parseCounter("Esteticista"), null);
+});
+
+test("contagem dos destaques: texto durante a contagem", () => {
+  const anos = parseCounter("6 anos")!;
+  assert.equal(counterText(anos, 0), "0 anos");
+  assert.equal(counterText(anos, 1), "1 ano");
+  assert.equal(counterText(anos, 6), "6 anos");
+  const mil = parseCounter("+1.000")!;
+  assert.equal(counterText(mil, 250), "+250");
+  assert.equal(counterText(mil, 1000), "+1.000");
 });

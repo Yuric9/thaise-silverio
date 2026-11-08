@@ -14,7 +14,9 @@ if (!file || !scope?.startsWith(".")) {
 
 function scopeSelector(selector) {
   const trimmed = selector.trim();
-  if (trimmed.startsWith(scope)) return trimmed;
+  // Já isolada (rodar o script de novo não muda nada).
+  if (trimmed.startsWith(scope) || trimmed.includes(`:has(${scope})`))
+    return trimmed;
   // As variáveis de cor ficam na página inteira (para o <body> também vê-las),
   // mas só quando a área correspondente estiver nela.
   if (trimmed === ":root") return `:root:has(${scope})`;

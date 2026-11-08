@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Effects from "@/components/site/Effects";
 import "./site.css";
 
 const title = "Thaise Silvério | Micropigmentação e Estética em Trindade – GO";
@@ -37,5 +38,10 @@ export default function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   // Isola o CSS do site (o build junta o CSS do site e do painel num arquivo só).
-  return <div className="site-scope">{children}</div>;
+  return (
+    <div className="site-scope">
+      {children}
+      <Effects />
+    </div>
+  );
 }
