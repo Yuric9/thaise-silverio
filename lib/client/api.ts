@@ -220,8 +220,14 @@ export async function uploadImage(file: File) {
   return key;
 }
 
-/** Envia uma foto da galeria do site: sempre em WebP, até 1200 px e sem metadados. */
-export async function uploadGalleryImage(file: File) {
+/**
+ * Envia uma foto do site (galeria ou curso): sempre em WebP, até 1200 px e sem
+ * metadados (a conversão apaga os dados de localização do celular).
+ */
+export async function uploadGalleryImage(
+  file: File,
+  folder: "gallery" | "course" = "gallery",
+) {
   const optimized = await optimizeImage(file, {
     force: true,
     maxSide: 1200,
@@ -229,7 +235,7 @@ export async function uploadGalleryImage(file: File) {
   });
   const form = new FormData();
   form.append("file", optimized.file);
-  form.append("folder", "gallery");
+  form.append("folder", folder);
   const { key } = await api<{ key: string }>("/api/upload", {
     method: "POST",
     body: form,

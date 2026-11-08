@@ -58,6 +58,17 @@ export type TitledItem = { title: string; text: string };
  * verdadeiro. Listas vazias = a seção correspondente não aparece.
  * Preço, carga horária, certificado etc. são sempre informados pela Thaise.
  */
+/** Foto do curso enviada pelo painel (fica no R2, pasta `course/`). */
+export type CoursePhoto = {
+  key: string;
+  /** Descrição da foto (leitor de tela e Google). */
+  alt: string;
+  /** Legenda opcional mostrada embaixo da foto. */
+  caption: string;
+  width: number;
+  height: number;
+};
+
 export type CourseContent = {
   published: boolean;
   title: string;
@@ -77,6 +88,10 @@ export type CourseContent = {
   faq: FaqItem[];
   /** Mensagem que já vai escrita no WhatsApp ao clicar em "Quero me inscrever". */
   ctaMessage: string;
+  /** Fotos da seção "Por dentro do curso" (turma, prática, kit...). */
+  photos: CoursePhoto[];
+  /** Foto do topo: chave de uma das `photos`; vazio = foto da Thaise. */
+  heroPhoto: string;
 };
 
 export type SiteContent = {
@@ -143,6 +158,8 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     faq: [],
     ctaMessage:
       "Olá, Thaise! Vim pelo site e quero me inscrever no Curso de Micropigmentação de Sobrancelhas.",
+    photos: [],
+    heroPhoto: "",
   },
 };
 

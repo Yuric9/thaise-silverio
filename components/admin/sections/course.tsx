@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { api, useApi } from "../../../lib/client/api";
+import { useRef, useState, type FormEvent } from "react";
+import {
+  api,
+  imageUrl,
+  uploadGalleryImage,
+  useApi,
+} from "../../../lib/client/api";
 import { REFRESH } from "../../../lib/client/refresh";
 import { useAction } from "../../../lib/client/use-action";
 import type {
   CourseContent,
+  CoursePhoto,
   FaqItem,
   SiteContent,
   TitledItem,
@@ -128,6 +134,19 @@ function CourseForm({ initial }: { initial: CourseContent }) {
             onChange={(event) => set("subtitle", event.target.value)}
           />
         </div>
+      </Panel>
+
+      <Panel
+        title="Fotos do curso"
+        eyebrow="Turma, prática, kit, certificado... (até 12)"
+      >
+        <CoursePhotos
+          photos={course.photos}
+          heroPhoto={course.heroPhoto}
+          onChange={(photos, heroPhoto) =>
+            setCourse({ ...course, photos, heroPhoto })
+          }
+        />
       </Panel>
 
       <Panel
@@ -421,6 +440,156 @@ function FaqList({
           >
             Adicionar pergunta
           </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const MAX_PHOTOS = 12;
+
+/**
+ * Fotos do curso: a foto é enviada na hora (já reduzida, em WebP e sem dados
+ * de localização), mas só aparece no site depois de clicar em Salvar.
+ */
+function CoursePhotos({
+  photos,
+  heroPhoto,
+  onChange,
+}: {
+  photos: CoursePhoto[];
+  heroPhoto: string;
+  onChange: (photos: CoursePhoto[], heroPhoto: string) => void;
+}) {
+  const { busy, run } = useAction();
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [authorized, setAuthorized] = useState(photos.length > 0);
+
+  async function add(files: FileList | null) {
+    const chosen = Array.from(files ?? []).slice(0, MAX_PHOTOS - photos.length);
+    if (!chosen.length) return;
+    const uploaded = await run(
+      () =>
+        Promise.all(
+          chosen.map(async (file) => {
+            const result = await uploadGalleryImage(file, "course");
+            return {
+              key: result.key,
+              alt: "",
+              caption: "",
+              width: result.width || 1000,
+              height: result.height || 1000,
+            } satisfies CoursePhoto;
+          }),
+        ),
+      {
+        success:
+          "Foto enviada! Escreva a descrição e clique em Salvar para ela aparecer no site.",
+      },
+    );
+    if (fileInput.current) fileInput.current.value = "";
+    if (uploaded) onChange([...photos, ...uploaded], heroPhoto);
+  }
+
+  const update = (key: string, field: "alt" | "caption", value: string) =>
+    onChange(
+      photos.map((photo) =>
+        photo.key === key ? { ...photo, [field]: value } : photo,
+      ),
+      heroPhoto,
+    );
+
+  return (
+    <div className="stack">
+      {photos.length > 0 && (
+        <ul className="gallery-admin course-photos-admin">
+          {photos.map((photo, index) => (
+            <li key={photo.key}>
+              <img
+                src={imageUrl(photo.key)}
+                alt={photo.alt || `Foto ${index + 1} do curso`}
+                width={photo.width}
+                height={photo.height}
+                loading="lazy"
+              />
+              <div className="gallery-admin__body">
+                <TextAreaField
+                  label="Descrição da foto"
+                  hint="Ex.: Aluna praticando o desenho da sobrancelha em modelo"
+                  rows={2}
+                  maxLength={240}
+                  value={photo.alt}
+                  onChange={(event) =>
+                    update(photo.key, "alt", event.target.value)
+                  }
+                />
+                <TextField
+                  label="Legenda (opcional)"
+                  maxLength={80}
+                  value={photo.caption}
+                  onChange={(event) =>
+                    update(photo.key, "caption", event.target.value)
+                  }
+                />
+                <CheckboxField
+                  label="Usar como foto do topo da página"
+                  checked={heroPhoto === photo.key}
+                  onChange={(event) =>
+                    onChange(photos, event.target.checked ? photo.key : "")
+                  }
+                />
+                <div className="gallery-admin__actions">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon="trash"
+                    onClick={() =>
+                      onChange(
+                        photos.filter((item) => item.key !== photo.key),
+                        heroPhoto === photo.key ? "" : heroPhoto,
+                      )
+                    }
+                  >
+                    Remover
+                  </Button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {photos.length === 0 && (
+        <p className="muted">
+          Sem fotos, a seção “Por dentro do curso” não aparece e o topo da
+          página usa a foto da Thaise.
+        </p>
+      )}
+      {photos.length < MAX_PHOTOS && (
+        <div className="stack">
+          <CheckboxField
+            label="As pessoas que aparecem nas fotos autorizaram o uso da imagem"
+            checked={authorized}
+            onChange={(event) => setAuthorized(event.target.checked)}
+          />
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            hidden
+            onChange={(event) => add(event.target.files)}
+          />
+          <div>
+            <Button
+              variant="secondary"
+              icon="upload"
+              loading={busy}
+              disabled={!authorized}
+              onClick={() => fileInput.current?.click()}
+            >
+              Adicionar fotos
+            </Button>
+          </div>
         </div>
       )}
     </div>

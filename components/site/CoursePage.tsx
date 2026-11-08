@@ -1,3 +1,4 @@
+import { imageUrl } from "@/lib/image-url";
 import type { CourseContent, Highlight } from "@/lib/site-content";
 import { whatsappLink } from "@/lib/site-content";
 import Faq from "./Faq";
@@ -21,6 +22,8 @@ export default function CoursePage({
   highlights,
 }: Props) {
   const enrollUrl = whatsappLink(whatsappNumber, course.ctaMessage);
+  // Foto do topo: a escolhida no painel ou, se nenhuma, a foto da Thaise.
+  const cover = course.photos.find((photo) => photo.key === course.heroPhoto);
   const enroll = (label: string, variant = "button-gold") => (
     <a
       className={`button ${variant}`}
@@ -57,14 +60,25 @@ export default function CoursePage({
         </div>
         <div className="hero-art">
           <div className="art-frame">
-            <img
-              className="art-photo"
-              src="/images/thaise-silverio.webp"
-              alt="Thaise Silvério, instrutora do curso"
-              width={900}
-              height={1200}
-              fetchPriority="high"
-            />
+            {cover ? (
+              <img
+                className="art-photo"
+                src={imageUrl(cover.key)}
+                alt={cover.alt}
+                width={cover.width}
+                height={cover.height}
+                fetchPriority="high"
+              />
+            ) : (
+              <img
+                className="art-photo"
+                src="/images/thaise-silverio.webp"
+                alt="Thaise Silvério, instrutora do curso"
+                width={900}
+                height={1200}
+                fetchPriority="high"
+              />
+            )}
             <div className="art-caption">FORMAÇÃO COM QUEM FAZ</div>
           </div>
         </div>
@@ -117,6 +131,38 @@ export default function CoursePage({
                   </p>
                 )}
               </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {course.photos.length > 0 && (
+        <section className="results section course-photos" id="fotos">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">POR DENTRO DO CURSO</p>
+              <h2>
+                Momentos da <em>formação</em>
+              </h2>
+            </div>
+          </div>
+          <div className="results-grid">
+            {course.photos.map((photo) => (
+              <figure className="result-card" key={photo.key}>
+                <img
+                  src={imageUrl(photo.key)}
+                  alt={photo.alt}
+                  width={photo.width}
+                  height={photo.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+                {photo.caption && (
+                  <figcaption>
+                    <span>{photo.caption}</span>
+                  </figcaption>
+                )}
+              </figure>
             ))}
           </div>
         </section>
