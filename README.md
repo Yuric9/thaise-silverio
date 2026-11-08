@@ -7,7 +7,9 @@ Site e sistema de gestão de uma profissional de micropigmentação e estética.
 - **Painel (`/admin`):** agenda, caixa, relatórios, clientes, remarketing e produtos,
   além da edição do conteúdo do site sem mexer em código.
 
-🔗 **Site no ar:** https://thaise-silverio.pages.dev
+🔗 **Site no ar:** https://thaise-silverio-app.jesika-yure.workers.dev
+
+🔐 **Painel:** https://thaise-silverio-app.jesika-yure.workers.dev/admin (só com login)
 
 ![Página inicial no computador](docs/screenshots/desktop.webp)
 

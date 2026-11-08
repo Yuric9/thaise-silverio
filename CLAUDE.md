@@ -65,6 +65,7 @@ aceita (só no teste local).
 
 ## Publicação
 
+- No ar em https://thaise-silverio-app.jesika-yure.workers.dev (painel em `/admin`).
 - Worker `thaise-silverio-app`, D1 `thaise-silverio-db`
   (`44cba372-1f26-449d-a504-b8f58380900f`, em `vite.config.ts`) e R2
   `thaise-silverio-fotos`, já criados na conta da Cloudflare.

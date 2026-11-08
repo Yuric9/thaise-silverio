@@ -8,7 +8,7 @@
  */
 
 /** Endereço público do site (troque quando tiver domínio próprio). */
-export const SITE_URL = "https://thaise-silverio.pages.dev";
+export const SITE_URL = "https://thaise-silverio-app.jesika-yure.workers.dev";
 
 export type ContactContent = {
   /** Só dígitos, com 55 + DDD (ex.: 556281231427). */
