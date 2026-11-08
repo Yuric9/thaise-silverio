@@ -32,6 +32,7 @@ export default async function Home() {
         <Courses
           text={texts.coursesText}
           whatsappNumber={contact.whatsappNumber}
+          coursePublished={content.course.published}
         />
         <Faq items={faq} />
         <Contact contact={contact} text={texts.contactText} />

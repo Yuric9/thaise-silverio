@@ -15,7 +15,14 @@ const LINKS = [
  * Cabeçalho do site. No computador o menu fica sempre à mostra; no celular
  * (até 900px) ele se recolhe no botão "Menu" (hambúrguer).
  */
-export default function Header({ showFaq = false }: { showFaq?: boolean }) {
+export default function Header({
+  showFaq = false,
+  base = "",
+}: {
+  showFaq?: boolean;
+  /** "/" em páginas que não são a inicial: os links viram "/#sobre" etc. */
+  base?: string;
+}) {
   const [open, setOpen] = useState(false);
   // "Dúvidas" só entra no menu quando há perguntas frequentes no site.
   const links = showFaq
@@ -38,7 +45,11 @@ export default function Header({ showFaq = false }: { showFaq?: boolean }) {
         <span>ATENDIMENTO COM HORA MARCADA</span>
       </div>
       <header className={`header ${open ? "is-open" : ""}`.trim()}>
-        <a href="#inicio" className="brand" onClick={() => setOpen(false)}>
+        <a
+          href={`${base}#inicio`}
+          className="brand"
+          onClick={() => setOpen(false)}
+        >
           <img
             src="/images/logo-monograma.webp"
             alt="Thaise Silvério — Micropigmentação e Estética"
@@ -48,14 +59,18 @@ export default function Header({ showFaq = false }: { showFaq?: boolean }) {
         </a>
         <nav id="menu-principal" aria-label="Menu principal">
           {links.map((link) => (
-            <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+            <a
+              key={link.href}
+              href={`${base}${link.href}`}
+              onClick={() => setOpen(false)}
+            >
               {link.label}
             </a>
           ))}
         </nav>
         <a
           className="header-cta"
-          href="#contato"
+          href={`${base}#contato`}
           onClick={() => setOpen(false)}
         >
           Agendar avaliação <span aria-hidden="true">↗</span>

@@ -92,6 +92,15 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
   procedimentos ou saúde. `FAQ_SUGGESTIONS` traz só perguntas sugeridas.
 - Sem perguntas salvas, a seção e o link "Dúvidas" do menu não aparecem.
 
+## Página do curso (/curso)
+
+- Página de vendas do Curso de Micropigmentação de Sobrancelhas, editada em
+  /admin → Curso (chave `course` do conteúdo). Componente `components/site/CoursePage.tsx`.
+- Só existe (e só entra no sitemap) quando `published` estiver marcado; até lá o
+  botão "Conheça o curso" da página inicial continua indo para o WhatsApp.
+- Cada seção só aparece quando preenchida. Não invente preço, carga horária,
+  certificado ou conteúdo do curso: isso é a Thaise quem informa.
+
 ## Ideias para o futuro (ainda não implementadas)
 
 - **Técnicas que ela domina** (ex.: fio a fio, shadow, revitalização labial)

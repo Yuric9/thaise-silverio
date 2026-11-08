@@ -18,6 +18,7 @@ import { Modal } from "../ui/modal";
 import AgendaSection from "./sections/agenda";
 import CashSection from "./sections/cash";
 import ClientsSection from "./sections/clients";
+import CourseSection from "./sections/course";
 import DashboardSection from "./sections/dashboard";
 import MarketingSection from "./sections/marketing";
 import ProductsSection from "./sections/products";
@@ -36,6 +37,7 @@ export type SectionId =
   | "relatorios"
   | "remarketing"
   | "site"
+  | "curso"
   | "configuracoes";
 
 export type SectionProps = {
@@ -120,6 +122,13 @@ const SECTIONS: SectionDefinition[] = [
     icon: "globe",
     group: "Site",
     component: SiteSection,
+  },
+  {
+    id: "curso",
+    label: "Curso",
+    icon: "star",
+    group: "Site",
+    component: CourseSection,
   },
   {
     id: "configuracoes",

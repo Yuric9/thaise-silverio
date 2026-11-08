@@ -2969,3 +2969,11 @@ body:has(.admin-scope) {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
 }
+
+/* Página do curso: linha com campo e botão de remover. */
+.admin-scope .course-admin__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 8px;
+}

@@ -111,3 +111,14 @@ test("a página de verificação do login foi removida", async () => {
   const response = await request("/api/auth/check");
   assert.equal(response.status, 404);
 });
+
+test("a página do curso não existe enquanto não for publicada", async () => {
+  const response = await request("/curso", {
+    headers: { accept: "text/html" },
+  });
+  assert.equal(response.status, 404);
+  const home = await (
+    await request("/", { headers: { accept: "text/html" } })
+  ).text();
+  assert.doesNotMatch(home, /href="\/curso"/);
+});

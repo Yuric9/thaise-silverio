@@ -4,9 +4,12 @@ import { whatsappLink } from "@/lib/site-content";
 export default function Courses({
   text,
   whatsappNumber,
+  coursePublished = false,
 }: {
   text: string;
   whatsappNumber: string;
+  /** Com a página do curso publicada, o botão leva para /curso. */
+  coursePublished?: boolean;
 }) {
   return (
     <section className="statement" id="cursos">
@@ -20,17 +23,23 @@ export default function Courses({
         <p>
           <RichText text={text} />
         </p>
-        <a
-          className="button button-outline"
-          href={whatsappLink(
-            whatsappNumber,
-            "Olá, Thaise! Vim pelo site e quero saber mais sobre os cursos de micropigmentação.",
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Conheça os cursos <span aria-hidden="true">↗</span>
-        </a>
+        {coursePublished ? (
+          <a className="button button-outline" href="/curso">
+            Conheça o curso <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <a
+            className="button button-outline"
+            href={whatsappLink(
+              whatsappNumber,
+              "Olá, Thaise! Vim pelo site e quero saber mais sobre os cursos de micropigmentação.",
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Conheça os cursos <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
       <div className="statement-mark" aria-hidden="true">
         TS
