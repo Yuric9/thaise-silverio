@@ -68,10 +68,10 @@ export async function POST(request: Request) {
 
     const role = isConfiguredAdmin && valid ? ADMIN_ROLE : account?.role;
     if (!valid || role !== ADMIN_ROLE) {
-      await recordLoginFailure(limit.key);
+      await recordLoginFailure(limit);
       return fail(401, "E-mail ou senha incorretos.");
     }
-    await clearLoginFailures(limit.key);
+    await clearLoginFailures(limit);
 
     const now = new Date().toISOString();
     if (!account) {

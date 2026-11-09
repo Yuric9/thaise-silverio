@@ -86,6 +86,17 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
 - Preços e durações dos procedimentos vieram como "a definir" e o horário de
   atendimento veio com um padrão: a Thaise precisa ajustar no painel.
 
+## Segurança (decisões da dona)
+
+- Login com dois limites (`lib/server/rate-limit.ts`): 8 erros por IP + e-mail
+  e 30 erros só por e-mail (de qualquer IP), cada um bloqueando por 15 minutos.
+- **Risco conhecido, mantido por decisão da dona (revisão de 09/11/2026):** o
+  login também aceita a cópia da senha guardada na tabela `accounts` no
+  primeiro acesso. Por isso, **trocar `ADMIN_PASSWORD_HASH` não desativa a
+  senha antiga** e as sessões abertas duram até 14 dias. Se ela pedir para
+  bloquear uma senha vazada, corrija: o `ADMIN_EMAIL` deve aceitar só o segredo
+  e as sessões devem cair quando o segredo mudar.
+
 ## Perguntas frequentes
 
 - Editáveis em /admin → Site → Perguntas frequentes (chave `faq` do conteúdo).
