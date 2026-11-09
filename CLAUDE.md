@@ -105,6 +105,9 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
   `course/`, convertidas para WebP sem metadados). Ficam em `course.photos`.
   A foto do topo é enviada à parte (`course.cover`); `null` = mesma foto da
   Thaise da página inicial.
+- Validação do curso em `lib/server/course.ts` (testável no Node, com testes em
+  `tests/site.test.ts`). Ao salvar, as fotos que saíram do curso são apagadas
+  do R2 (`removedCourseImages`).
 - Cada seção só aparece quando preenchida. Não invente preço, carga horária,
   certificado ou conteúdo do curso: isso é a Thaise quem informa.
 

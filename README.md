@@ -29,7 +29,14 @@ precisar explicar o que quer.
 
 ### Site público
 
-- **Página única** com as seções Início, Sobre, Procedimentos, Resultados, Cursos e Contato.
+- **Página inicial** com as seções Início, Sobre, Procedimentos, Resultados, Cursos e Contato.
+- **Página de vendas do curso (`/curso`)** de micropigmentação de sobrancelhas:
+  para quem é, conteúdo, como funciona, o que está incluso, fotos da turma, preço,
+  dúvidas e botão de inscrição pelo WhatsApp. Abre em uma aba nova pelo menu
+  "Cursos" e só vai ao ar depois de publicada no painel.
+- **Efeitos suaves:** seções que surgem ao rolar, números dos destaques que contam,
+  fotos que abrem ampliadas e brilho nos botões dourados. Quem configura o aparelho
+  para "reduzir movimento" vê o site sem animações.
 - **Agendamento pelo WhatsApp** com mensagem pronta para cada procedimento e para os cursos.
 - **Galeria "Antes & depois"** com fotos reais, autorizadas pelas clientes.
 - **Biografia** da profissional, com destaques (+500 clientes, 6 anos de experiência).
@@ -51,7 +58,8 @@ Baseado no sistema da Yuri Barbershop, adaptado para uma profissional que atende
 | **Remarketing**   | Listas prontas com mensagem no WhatsApp: pós-atendimento, **retoque**, **manutenção anual**, retorno, aniversariantes, fidelidade e indicação. |
 | **Procedimentos** | Preço, duração e dias até o retoque (agenda) e descrição, etiqueta e ordem (cards do site).                                                    |
 | **Produtos**      | Estoque, fotos e venda no balcão.                                                                                                              |
-| **Site**          | Textos e biografia, galeria (envio de fotos), destaques e contatos (WhatsApp e Instagram).                                                     |
+| **Site**          | Textos e biografia, galeria (envio de fotos), destaques, perguntas frequentes e contatos (WhatsApp, Instagram e endereço).                     |
+| **Curso**         | Página do curso: textos, módulos, detalhes, preço, dúvidas, foto do topo e fotos da turma; publicar ou tirar do ar.                            |
 | **Configurações** | Horário de atendimento por dia da semana.                                                                                                      |
 
 ![Seção de resultados](docs/screenshots/resultados.webp)

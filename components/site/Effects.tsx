@@ -122,11 +122,22 @@ export default function Effects() {
   useEffect(() => {
     if (!photo) return;
     closeButton.current?.focus();
+    // Enquanto a foto está aberta, a página de trás não rola
+    // e o Tab não sai da foto (o único botão é o Fechar).
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
+      if (event.key === "Tab") {
+        event.preventDefault();
+        closeButton.current?.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [photo, close]);
 
   if (!photo) return null;
