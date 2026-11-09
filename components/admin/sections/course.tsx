@@ -60,7 +60,10 @@ function CourseForm({ initial }: { initial: CourseContent }) {
   const set = <K extends keyof CourseContent>(
     key: K,
     value: CourseContent[K],
-  ) => setCourse({ ...course, [key]: value });
+  ) =>
+    // Parte sempre do valor mais recente: um envio de foto que termina depois
+    // não apaga o que foi digitado enquanto ela subia.
+    setCourse((current) => ({ ...current, [key]: value }));
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -154,6 +157,12 @@ function CourseForm({ initial }: { initial: CourseContent }) {
         <CoursePhotos
           photos={course.photos}
           onChange={(photos) => set("photos", photos)}
+          onAdd={(added) =>
+            setCourse((current) => ({
+              ...current,
+              photos: [...current.photos, ...added].slice(0, MAX_PHOTOS),
+            }))
+          }
         />
       </Panel>
 
@@ -463,9 +472,12 @@ const MAX_PHOTOS = 12;
 function CoursePhotos({
   photos,
   onChange,
+  onAdd,
 }: {
   photos: CoursePhoto[];
   onChange: (photos: CoursePhoto[]) => void;
+  /** Acrescenta as fotos enviadas à lista mais recente (o envio demora). */
+  onAdd: (photos: CoursePhoto[]) => void;
 }) {
   const { busy, run } = useAction();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -494,7 +506,7 @@ function CoursePhotos({
       },
     );
     if (fileInput.current) fileInput.current.value = "";
-    if (uploaded) onChange([...photos, ...uploaded]);
+    if (uploaded) onAdd(uploaded);
   }
 
   const update = (key: string, field: "alt" | "caption", value: string) =>

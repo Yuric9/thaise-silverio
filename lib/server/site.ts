@@ -12,20 +12,16 @@ import {
   DEFAULT_GALLERY,
   DEFAULT_SITE_CONTENT,
   SITE_CONTENT_KEYS,
+  type CourseContent,
   type GalleryItem,
   type SiteContent,
   type SiteContentKey,
   type SiteService,
 } from "../site-content";
+import { faqSchema, shortText } from "./content-fields";
+import { courseSchema, removedCourseImages } from "./course";
 
 // ─── Validação do que o painel envia ─────────────────────────────────────────
-
-const shortText = (label: string, max = 200) =>
-  z
-    .string({ error: `Informe ${label}.` })
-    .trim()
-    .min(1, `Informe ${label}.`)
-    .max(max, `${label} muito longo.`);
 
 export const contactSchema = z.object({
   whatsappNumber: z
@@ -110,71 +106,6 @@ export const textsSchema = z.object({
   contactText: shortText("o texto do contato", 300),
 });
 
-export const faqSchema = z
-  .array(
-    z.object({
-      question: shortText("a pergunta", 160),
-      answer: shortText("a resposta (ou remova a pergunta)", 800),
-    }),
-  )
-  .max(12, "Use no máximo 12 perguntas.");
-
-const listText = (label: string, max: number) =>
-  z
-    .string()
-    .trim()
-    .min(1, `Preencha ${label} ou remova a linha.`)
-    .max(max, `${label} muito longo.`);
-const titledItems = (label: string) =>
-  z
-    .array(
-      z.object({
-        title: listText(`o título de ${label}`, 120),
-        text: z.string().trim().max(600, "Texto muito longo."),
-      }),
-    )
-    .max(12, `Use no máximo 12 itens em ${label}.`);
-
-/** Foto do curso: só imagens enviadas pelo painel (pasta `course/` do R2). */
-const coursePhotoSchema = z.object({
-  key: z
-    .string()
-    .regex(
-      /^course\/[0-9a-f-]{36}\.(jpg|png|webp)$/,
-      "Envie a foto do curso novamente.",
-    ),
-  alt: z
-    .string()
-    .trim()
-    .min(
-      10,
-      "Descreva cada foto do curso em pelo menos 10 letras (ajuda quem usa leitor de tela e o Google).",
-    )
-    .max(240, "Descrição da foto muito longa."),
-  caption: z.string().trim().max(80, "Legenda da foto muito longa."),
-  width: z.coerce.number().int().min(1).max(5000),
-  height: z.coerce.number().int().min(1).max(5000),
-});
-
-export const courseSchema = z.object({
-  published: z.boolean(),
-  title: shortText("o nome do curso", 120),
-  subtitle: shortText("a frase de apresentação", 400),
-  audience: z.array(listText("o item de “Para quem é”", 200)).max(10),
-  modules: titledItems("“O que você vai aprender”"),
-  details: titledItems("“Como funciona”"),
-  includes: z.array(listText("o item de “O que está incluso”", 200)).max(12),
-  price: z.string().trim().max(40, "Preço muito longo."),
-  priceNote: z.string().trim().max(160, "Condições muito longas."),
-  faq: faqSchema,
-  ctaMessage: shortText("a mensagem do WhatsApp", 300),
-  photos: z
-    .array(coursePhotoSchema)
-    .max(12, "Use no máximo 12 fotos do curso.")
-    .default([]),
-  cover: coursePhotoSchema.omit({ caption: true }).nullable().default(null),
-});
-
 export const contentSchemas = {
   contact: contactSchema,
   highlights: highlightsSchema,
@@ -246,6 +177,9 @@ export async function saveSiteContent(
   value: unknown,
 ) {
   const data = contentSchemas[key].parse(value);
+  // Curso: guarda o que estava salvo para apagar do R2 as fotos que saíram.
+  const before =
+    key === "course" ? (await readSiteContent(db)).course : undefined;
   const now = new Date().toISOString();
   const json = JSON.stringify(data);
   await db
@@ -255,7 +189,21 @@ export async function saveSiteContent(
       target: siteContent.key,
       set: { value: json, updatedAt: now },
     });
+  if (before)
+    await deleteImages(removedCourseImages(before, data as CourseContent));
   return data;
+}
+
+/** Apaga arquivos do R2; se falhar, o conteúdo já foi salvo e o site segue normal. */
+async function deleteImages(keys: string[]) {
+  if (!keys.length) return;
+  const bucket = (globalThis as typeof globalThis & { __TS_BUCKET?: R2Bucket })
+    .__TS_BUCKET;
+  try {
+    await bucket?.delete(keys);
+  } catch {
+    // Sobra um arquivo sem uso no R2, sem afetar o site.
+  }
 }
 
 export async function listGallery(

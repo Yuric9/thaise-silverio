@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { counterText, parseCounter } from "../lib/domain/counter.ts";
+import { courseSchema, removedCourseImages } from "../lib/server/course.ts";
 import {
   isMaintenanceDue,
   isTouchUpDue,
@@ -128,4 +129,54 @@ test("contagem dos destaques: texto durante a contagem", () => {
   const mil = parseCounter("+1.000")!;
   assert.equal(counterText(mil, 250), "+250");
   assert.equal(counterText(mil, 1000), "+1.000");
+});
+
+const photo = (
+  n: number,
+  alt = "Aluna praticando o desenho da sobrancelha",
+) => ({
+  key: `course/00000000-0000-4000-8000-${String(n).padStart(12, "0")}.webp`,
+  alt,
+  caption: "",
+  width: 1000,
+  height: 1000,
+});
+
+test("curso: conteúdo salvo antes das fotos continua válido", () => {
+  const { photos, cover, ...antigo } = DEFAULT_SITE_CONTENT.course;
+  const lido = courseSchema.parse(antigo);
+  assert.deepEqual(lido.photos, []);
+  assert.equal(lido.cover, null);
+  assert.equal(photos.length + (cover ? 1 : 0), 0);
+});
+
+test("curso: fotos precisam de descrição e no máximo 12", () => {
+  const base = DEFAULT_SITE_CONTENT.course;
+  assert.ok(courseSchema.safeParse({ ...base, photos: [photo(1)] }).success);
+  assert.ok(
+    !courseSchema.safeParse({ ...base, photos: [photo(1, "curta")] }).success,
+  );
+  const treze = Array.from({ length: 13 }, (_, i) => photo(i + 1));
+  assert.ok(!courseSchema.safeParse({ ...base, photos: treze }).success);
+  // Só fotos enviadas pelo painel (pasta course/).
+  const estranha = { ...photo(1), key: "gallery/qualquer.webp" };
+  assert.ok(!courseSchema.safeParse({ ...base, photos: [estranha] }).success);
+});
+
+test("curso: apaga do R2 só as fotos que saíram", () => {
+  const antes = { photos: [photo(1), photo(2)], cover: photo(3) };
+  const depois = { photos: [photo(2)], cover: null };
+  assert.deepEqual(removedCourseImages(antes, depois), [
+    photo(1).key,
+    photo(3).key,
+  ]);
+  assert.deepEqual(removedCourseImages(depois, depois), []);
+  // Uma foto que virou a foto do topo não é apagada.
+  assert.deepEqual(
+    removedCourseImages(
+      { photos: [photo(1)], cover: null },
+      { photos: [], cover: photo(1) },
+    ),
+    [],
+  );
 });
