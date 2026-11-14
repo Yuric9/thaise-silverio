@@ -79,6 +79,40 @@ export function adminRoute<P = Record<string, never>>(
   };
 }
 
+/**
+ * Rota pública (formulários do site): sem login, mas bloqueia envios vindos
+ * de outros sites e trata erros como o `adminRoute`.
+ */
+export function publicRoute(handler: (request: Request) => Promise<Response>) {
+  return async (request: Request) => {
+    try {
+      if (request.method !== "GET") {
+        const crossSite = rejectCrossSiteWrite(request);
+        if (crossSite) return crossSite;
+      }
+      return await handler(request);
+    } catch (error) {
+      if (error instanceof ApiError)
+        return errorResponse(error.status, error.message);
+      if (error instanceof z.ZodError)
+        return errorResponse(
+          400,
+          error.issues[0]?.message || "Dados inválidos.",
+        );
+      console.error(
+        "public-error",
+        request.method,
+        new URL(request.url).pathname,
+        error,
+      );
+      return errorResponse(
+        500,
+        "Não foi possível enviar agora. Tente novamente em instantes.",
+      );
+    }
+  };
+}
+
 /** Lê e valida o corpo JSON da requisição. */
 export async function readBody<S extends z.ZodType>(
   request: Request,

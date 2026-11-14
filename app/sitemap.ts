@@ -17,5 +17,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           },
         ]
       : []),
+    ...(content.booking.enabled
+      ? [
+          {
+            url: `${SITE_URL}/agendar`,
+            changeFrequency: "monthly" as const,
+            priority: 0.7,
+          },
+        ]
+      : []),
   ];
 }

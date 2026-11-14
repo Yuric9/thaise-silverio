@@ -3,9 +3,11 @@ import test from "node:test";
 import { counterText, parseCounter } from "../lib/domain/counter.ts";
 import { courseSchema, removedCourseImages } from "../lib/server/course.ts";
 import {
+  campaignContactKey,
   isMaintenanceDue,
   isTouchUpDue,
   touchUpDaysFor,
+  touchUpPhase,
 } from "../lib/domain/touch-up.ts";
 import {
   DEFAULT_SITE_CONTENT,
@@ -178,5 +180,26 @@ test("curso: apaga do R2 só as fotos que saíram", () => {
       { photos: [], cover: photo(1) },
     ),
     [],
+  );
+});
+
+test("lembrete de retoque: em que fase a cliente está", () => {
+  const services = [
+    { name: "Micropigmentação de sobrancelhas", touchUpDays: 30 },
+  ];
+  const client = (days: number | null, status = "Finalizado") => ({
+    email: "ana@cliente",
+    lastStatus: status,
+    lastService: "Micropigmentação de sobrancelhas",
+    lastVisit: "2026-10-01",
+    daysSinceLastVisit: days,
+  });
+  assert.equal(touchUpPhase(client(10), services), null);
+  assert.equal(touchUpPhase(client(28), services), "retoque");
+  assert.equal(touchUpPhase(client(350), services), "manutencao");
+  assert.equal(touchUpPhase(client(28, "Pendente"), services), null);
+  assert.equal(
+    campaignContactKey("retoque", client(28)),
+    "retoque-ana@cliente-2026-10-01",
   );
 });

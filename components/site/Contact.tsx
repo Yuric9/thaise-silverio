@@ -10,9 +10,12 @@ import {
 export default function Contact({
   contact,
   text,
+  booking = false,
 }: {
   contact: ContactContent;
   text: string;
+  /** Agendamento pelo site ligado: mostra o botão "Agendar pelo site". */
+  booking?: boolean;
 }) {
   return (
     <section className="contact section" id="contato">
@@ -29,8 +32,13 @@ export default function Contact({
           <RichText text={text} />
         </p>
         <div className="contact-actions">
+          {booking && (
+            <a className="button button-gold" href="/agendar">
+              Agendar pelo site <span aria-hidden="true">→</span>
+            </a>
+          )}
           <a
-            className="button button-gold"
+            className={`button ${booking ? "button-line" : "button-gold"}`}
             href={whatsappLink(
               contact.whatsappNumber,
               "Olá, Thaise! Vim pelo site e gostaria de agendar uma avaliação.",

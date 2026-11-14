@@ -112,6 +112,14 @@ export const contentSchemas = {
   texts: textsSchema,
   faq: faqSchema,
   course: courseSchema,
+  booking: z.object({
+    enabled: z.boolean(),
+    maxDaysAhead: z.coerce
+      .number()
+      .int()
+      .min(7, "Use pelo menos 7 dias.")
+      .max(120, "Use no máximo 120 dias."),
+  }),
 } as const;
 
 // ─── Leitura ─────────────────────────────────────────────────────────────────

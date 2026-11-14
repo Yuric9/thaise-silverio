@@ -26,6 +26,7 @@ export const POST = adminRoute(async ({ request }) => {
       description: true,
       tag: true,
       showOnSite: true,
+      onlineBooking: true,
       sortOrder: true,
       touchUpDays: true,
     }),

@@ -2998,3 +2998,25 @@ body:has(.admin-scope) {
     grid-template-columns: 1fr;
   }
 }
+
+/* Lembrete de retoque (tela Início) */
+.admin-scope .touch-up-notice {
+  display: grid;
+  gap: 4px;
+}
+.admin-scope .touch-up-notice p {
+  margin: 0;
+}
+
+/* Interessadas no curso */
+.admin-scope .lead-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+.admin-scope .lead-card__message {
+  margin: 0;
+  font-style: italic;
+  color: var(--text-muted, #6b6b6b);
+}

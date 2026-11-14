@@ -20,6 +20,7 @@ import CashSection from "./sections/cash";
 import ClientsSection from "./sections/clients";
 import CourseSection from "./sections/course";
 import DashboardSection from "./sections/dashboard";
+import LeadsSection from "./sections/leads";
 import MarketingSection from "./sections/marketing";
 import ProductsSection from "./sections/products";
 import ReportsSection from "./sections/reports";
@@ -38,6 +39,7 @@ export type SectionId =
   | "remarketing"
   | "site"
   | "curso"
+  | "interessadas"
   | "configuracoes";
 
 export type SectionProps = {
@@ -131,6 +133,13 @@ const SECTIONS: SectionDefinition[] = [
     component: CourseSection,
   },
   {
+    id: "interessadas",
+    label: "Interessadas",
+    icon: "users",
+    group: "Site",
+    component: LeadsSection,
+  },
+  {
     id: "configuracoes",
     label: "Configurações",
     icon: "settings",
@@ -142,7 +151,8 @@ const SECTIONS: SectionDefinition[] = [
 const DEFAULT_SECTION: SectionId = "inicio";
 
 function sectionFromHash(): SectionId {
-  const id = window.location.hash.slice(1);
+  // "#remarketing/retoque": a seção é a parte antes da barra.
+  const id = window.location.hash.slice(1).split("/")[0];
   return SECTIONS.some((section) => section.id === id)
     ? (id as SectionId)
     : DEFAULT_SECTION;

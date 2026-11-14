@@ -1158,3 +1158,109 @@ body:has(.site-scope) {
     transition: none;
   }
 }
+
+/* ─── Formulários do site (interessadas no curso, agendamento) ──────────── */
+.site-scope .site-form {
+  display: grid;
+  gap: 18px;
+  max-width: 760px;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid rgba(160, 80, 109, 0.15);
+  box-shadow: 0 18px 40px var(--shadow);
+}
+.site-scope .site-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.site-scope .site-form__full {
+  grid-column: 1 / -1;
+}
+.site-scope .site-form__field {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.site-scope .site-form input:not([type="checkbox"]):not([type="radio"]),
+.site-scope .site-form select,
+.site-scope .site-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(110, 48, 73, 0.25);
+  border-radius: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.site-scope .site-form input:focus-visible,
+.site-scope .site-form select:focus-visible,
+.site-scope .site-form textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  border-color: var(--primary);
+}
+.site-scope .site-form__consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.site-scope .site-form__consent input {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  flex: none;
+}
+.site-scope .site-form__trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.site-scope .site-form__error {
+  margin: 0;
+  padding: 10px 14px;
+  background: #fbe9ec;
+  color: #8a1f3a;
+  font-size: 14px;
+}
+.site-scope .site-form__done {
+  max-width: 760px;
+  padding: 24px 28px;
+  background: #fff;
+  border-left: 3px solid var(--gold);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.site-scope .site-form .button {
+  justify-self: start;
+  border: 0;
+  cursor: pointer;
+}
+.site-scope .site-form .button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.site-scope .course-lead .section-heading p {
+  max-width: 360px;
+}
+@media (max-width: 700px) {
+  .site-scope .site-form {
+    padding: 20px;
+  }
+  .site-scope .site-form__grid {
+    grid-template-columns: 1fr;
+  }
+}

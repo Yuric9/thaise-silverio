@@ -90,6 +90,7 @@ export const serviceFields = z.object({
   description: z.string().trim().max(300, "Descrição muito longa."),
   tag: z.string().trim().max(30, "Etiqueta muito longa."),
   showOnSite: z.boolean(),
+  onlineBooking: z.boolean(),
   sortOrder: z.coerce.number().int().min(0).max(999),
   touchUpDays: z.coerce
     .number()

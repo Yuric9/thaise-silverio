@@ -1,5 +1,3 @@
-export const WHATSAPP_BUSINESS_NUMBER = "5562981007636";
-
 export function phoneDigits(value: unknown) {
   return String(value ?? "").replace(/\D/g, "");
 }

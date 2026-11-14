@@ -169,6 +169,7 @@ function ServiceModal({
     description: service?.description ?? "",
     tag: service?.tag ?? "",
     showOnSite: service?.showOnSite ?? true,
+    onlineBooking: service?.onlineBooking ?? true,
     sortOrder: String(service?.sortOrder ?? nextOrder),
     touchUpDays: String(service?.touchUpDays ?? 0),
   });
@@ -307,6 +308,14 @@ function ServiceModal({
               checked={form.showOnSite}
               onChange={(event) =>
                 setForm({ ...form, showOnSite: event.target.checked })
+              }
+            />
+            <CheckboxField
+              className="form-grid__full"
+              label="Aceita agendamento pelo site (/agendar)"
+              checked={form.onlineBooking}
+              onChange={(event) =>
+                setForm({ ...form, onlineBooking: event.target.checked })
               }
             />
           </div>
