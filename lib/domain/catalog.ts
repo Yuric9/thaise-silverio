@@ -71,12 +71,14 @@ export const DEFAULT_SERVICES = [
     description: "Conhecimento e aperfeiçoamento para profissionais da beleza.",
     tag: "Educação",
     touchUpDays: 0,
+    onlineBooking: false,
   },
   {
     name: "Outros procedimentos estéticos",
     description: "Conheça as possibilidades de cuidado e beleza disponíveis.",
     tag: "Estética",
     touchUpDays: 0,
+    onlineBooking: false,
   },
 ].map((service, index) => ({
   ...service,

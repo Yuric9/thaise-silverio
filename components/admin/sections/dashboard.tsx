@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useApi } from "../../../lib/client/api";
+import { useClients, useServices } from "../../../lib/client/resources";
+import type { MarketingContact } from "../../../lib/client/types";
+import { campaignContactKey, touchUpPhase } from "../../../lib/domain/touch-up";
 import type { Dashboard } from "../../../lib/client/types";
 import { MONTH_NAMES } from "../../../lib/domain/dates";
 import { percentChange } from "../../../lib/domain/finance";
@@ -140,6 +143,46 @@ export default function DashboardSection({ navigate }: SectionProps) {
                 </p>
               )}
 
+              {data.siteRequests > 0 && (
+                <p className="notice">
+                  <strong>
+                    {plural(
+                      data.siteRequests,
+                      "pedido de horário",
+                      "pedidos de horário",
+                    )}
+                  </strong>{" "}
+                  pelo site aguardando confirmação.{" "}
+                  <button
+                    type="button"
+                    className="link-button"
+                    onClick={() => navigate("agenda")}
+                  >
+                    Ver agenda
+                  </button>
+                </p>
+              )}
+
+              {data.newLeads > 0 && (
+                <p className="notice">
+                  {plural(
+                    data.newLeads,
+                    "interessada nova",
+                    "interessadas novas",
+                  )}{" "}
+                  no curso.{" "}
+                  <button
+                    type="button"
+                    className="link-button"
+                    onClick={() => navigate("interessadas")}
+                  >
+                    Ver lista
+                  </button>
+                </p>
+              )}
+
+              <TouchUpNotice />
+
               <Panel title="Lançar atendimento">
                 <QuickEntry
                   extra={
@@ -169,5 +212,66 @@ export default function DashboardSection({ navigate }: SectionProps) {
 
       {expenseOpen && <ExpenseModal onClose={() => setExpenseOpen(false)} />}
     </>
+  );
+}
+
+/**
+ * Lembrete de retoque: quantas clientes estão na época do retoque ou da
+ * manutenção anual e ainda não receberam a mensagem (mesma regra do Remarketing).
+ */
+function TouchUpNotice() {
+  const clients = useClients();
+  const services = useServices();
+  const contacts = useApi<{ contacts: MarketingContact[] }>(
+    "/api/marketing-contacts",
+  );
+  if (!clients.data || !services.data || !contacts.data) return null;
+
+  const sent = new Set(
+    contacts.data.contacts
+      .filter((contact) => contact.sentAt)
+      .map((contact) => contact.key),
+  );
+  const count = { retoque: 0, manutencao: 0 };
+  for (const client of clients.data.clients) {
+    if (!client.phone) continue;
+    const phase = touchUpPhase(client, services.data.services);
+    if (phase && !sent.has(campaignContactKey(phase, client))) count[phase]++;
+  }
+  if (!count.retoque && !count.manutencao) return null;
+
+  const open = (campaign: "retoque" | "manutencao") => {
+    window.location.hash = `remarketing/${campaign}`;
+    window.scrollTo({ top: 0 });
+  };
+  return (
+    <div className="notice touch-up-notice">
+      {count.retoque > 0 && (
+        <p>
+          <strong>{plural(count.retoque, "cliente", "clientes")}</strong> na
+          época do retoque, ainda sem mensagem.{" "}
+          <button
+            type="button"
+            className="link-button"
+            onClick={() => open("retoque")}
+          >
+            Ver lista
+          </button>
+        </p>
+      )}
+      {count.manutencao > 0 && (
+        <p>
+          <strong>{plural(count.manutencao, "cliente", "clientes")}</strong> na
+          época da manutenção anual, ainda sem mensagem.{" "}
+          <button
+            type="button"
+            className="link-button"
+            onClick={() => open("manutencao")}
+          >
+            Ver lista
+          </button>
+        </p>
+      )}
+    </div>
   );
 }

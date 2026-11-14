@@ -17,6 +17,7 @@ export const REFRESH = {
     "/api/recurring-expenses",
   ],
   clients: ["/api/clients"],
+  leads: ["/api/course-leads", "/api/dashboard"],
   services: ["/api/services", "/api/appointments/availability", "/api/site"],
   products: [
     "/api/products",

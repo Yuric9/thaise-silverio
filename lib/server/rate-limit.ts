@@ -32,7 +32,12 @@ async function attemptKey(
   ).join("");
 }
 
-async function incrementAttempt(key: string, maxAttempts: number) {
+async function incrementAttempt(
+  key: string,
+  maxAttempts: number,
+  windowMs = WINDOW_MS,
+  blockMs = BLOCK_MS,
+) {
   const db = getDb();
   const [row] = await db
     .select()
@@ -44,13 +49,13 @@ async function incrementAttempt(key: string, maxAttempts: number) {
 
   const windowStart = row ? Date.parse(row.windowStart) : 0;
   const withinWindow =
-    Number.isFinite(windowStart) && now - windowStart < WINDOW_MS;
+    Number.isFinite(windowStart) && now - windowStart < windowMs;
   const nextCount = withinWindow ? row.count + 1 : 1;
   const nextWindow = withinWindow
     ? row.windowStart
     : new Date(now).toISOString();
   const blockedUntil =
-    nextCount >= maxAttempts ? new Date(now + BLOCK_MS).toISOString() : "";
+    nextCount >= maxAttempts ? new Date(now + blockMs).toISOString() : "";
 
   await db
     .insert(authAttempts)
@@ -102,4 +107,21 @@ export async function clearLoginFailures(limit: LoginLimit) {
   await getDb()
     .delete(authAttempts)
     .where(inArray(authAttempts.key, [limit.key, limit.emailKey]));
+}
+
+/**
+ * Limite para formulários públicos (interessadas no curso, agendamento):
+ * conta um envio e diz se aquele IP já passou do limite na janela.
+ */
+export async function publicFormLimit(
+  request: Request,
+  scope: string,
+  maxPerWindow: number,
+  windowMs = 60 * 60 * 1000,
+) {
+  const key = await attemptKey(request, scope, "");
+  if (await isBlocked(key)) return { blocked: true };
+  // O envio que atinge o limite ainda passa; o próximo é bloqueado.
+  await incrementAttempt(key, maxPerWindow, windowMs, windowMs);
+  return { blocked: false };
 }

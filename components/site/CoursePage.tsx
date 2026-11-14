@@ -1,6 +1,7 @@
 import { imageUrl } from "@/lib/image-url";
 import type { CourseContent, Highlight } from "@/lib/site-content";
 import { whatsappLink } from "@/lib/site-content";
+import CourseLeadForm from "./CourseLeadForm";
 import Faq from "./Faq";
 import { RichText } from "./rich-text";
 
@@ -266,6 +267,22 @@ export default function CoursePage({
         <div className="statement-mark" aria-hidden="true">
           TS
         </div>
+      </section>
+
+      <section className="section course-section course-lead" id="avise-me">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">PRÓXIMAS TURMAS</p>
+            <h2>
+              Quero ser <em>avisada</em>
+            </h2>
+          </div>
+          <p>
+            Deixe seu nome e WhatsApp: a Thaise te chama quando abrir uma turma
+            nova.
+          </p>
+        </div>
+        <CourseLeadForm />
       </section>
 
       <Faq items={course.faq} id="duvidas-curso" />

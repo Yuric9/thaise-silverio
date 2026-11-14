@@ -34,6 +34,11 @@ precisar explicar o que quer.
   para quem é, conteúdo, como funciona, o que está incluso, fotos da turma, preço,
   dúvidas e botão de inscrição pelo WhatsApp. Abre em uma aba nova pelo menu
   "Cursos" e só vai ao ar depois de publicada no painel.
+- **Agendamento pelo site (`/agendar`):** a cliente escolhe procedimento, dia e
+  um horário livre; o pedido entra na agenda do painel como "Pendente" para a
+  profissional confirmar. Liga e desliga pelo painel.
+- **Lista de interessadas no curso:** formulário "Quero ser avisada" na página do
+  curso, com consentimento para contato pelo WhatsApp.
 - **Efeitos suaves:** seções que surgem ao rolar, números dos destaques que contam,
   fotos que abrem ampliadas e brilho nos botões dourados. Quem configura o aparelho
   para "reduzir movimento" vê o site sem animações.
@@ -48,19 +53,20 @@ precisar explicar o que quer.
 
 Baseado no sistema da Yuri Barbershop, adaptado para uma profissional que atende sozinha.
 
-| Tela              | O que faz                                                                                                                                      |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Início**        | Faturamento do dia, da semana e do mês, lançamento rápido de atendimentos e lançamentos de hoje.                                               |
-| **Agenda**        | Agendamentos por dia, horários livres calculados pelo servidor, confirmar, finalizar (com pagamento) e cancelar.                               |
-| **Caixa**         | Entradas e saídas, atendimento avulso e despesas fixas do mês.                                                                                 |
-| **Relatórios**    | Resultado mensal e anual, por forma de pagamento e por procedimento.                                                                           |
-| **Clientes**      | Ficha da cliente, histórico, cartão fidelidade e importação de contatos.                                                                       |
-| **Remarketing**   | Listas prontas com mensagem no WhatsApp: pós-atendimento, **retoque**, **manutenção anual**, retorno, aniversariantes, fidelidade e indicação. |
-| **Procedimentos** | Preço, duração e dias até o retoque (agenda) e descrição, etiqueta e ordem (cards do site).                                                    |
-| **Produtos**      | Estoque, fotos e venda no balcão.                                                                                                              |
-| **Site**          | Textos e biografia, galeria (envio de fotos), destaques, perguntas frequentes e contatos (WhatsApp, Instagram e endereço).                     |
-| **Curso**         | Página do curso: textos, módulos, detalhes, preço, dúvidas, foto do topo e fotos da turma; publicar ou tirar do ar.                            |
-| **Configurações** | Horário de atendimento por dia da semana.                                                                                                      |
+| Tela              | O que faz                                                                                                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Início**        | Faturamento do dia, da semana e do mês, lançamento rápido, lançamentos de hoje e avisos: pedidos de horário pelo site, interessadas novas no curso e clientes na época do retoque. |
+| **Agenda**        | Agendamentos por dia, horários livres calculados pelo servidor, confirmar, finalizar (com pagamento) e cancelar.                                                                   |
+| **Caixa**         | Entradas e saídas, atendimento avulso e despesas fixas do mês.                                                                                                                     |
+| **Relatórios**    | Resultado mensal e anual, por forma de pagamento e por procedimento.                                                                                                               |
+| **Clientes**      | Ficha da cliente, histórico, cartão fidelidade e importação de contatos.                                                                                                           |
+| **Remarketing**   | Listas prontas com mensagem no WhatsApp: pós-atendimento, **retoque**, **manutenção anual**, retorno, aniversariantes, fidelidade e indicação.                                     |
+| **Procedimentos** | Preço, duração e dias até o retoque (agenda) e descrição, etiqueta e ordem (cards do site).                                                                                        |
+| **Produtos**      | Estoque, fotos e venda no balcão.                                                                                                                                                  |
+| **Site**          | Textos e biografia, galeria (envio de fotos), destaques, perguntas frequentes e contatos (WhatsApp, Instagram e endereço).                                                         |
+| **Curso**         | Página do curso: textos, módulos, detalhes, preço, dúvidas, foto do topo e fotos da turma; publicar ou tirar do ar.                                                                |
+| **Interessadas**  | Lista de quem pediu para ser avisada do curso: chamar no WhatsApp, marcar como contatada ou apagar.                                                                                |
+| **Configurações** | Horário de atendimento por dia da semana e agendamento pelo site (ligar/desligar).                                                                                                 |
 
 ![Seção de resultados](docs/screenshots/resultados.webp)
 

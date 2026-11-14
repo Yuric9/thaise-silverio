@@ -3,6 +3,7 @@
  * Sem dependências do banco, para poder ser testado direto no Node.
  */
 import { z } from "zod";
+import { isValidPhone } from "../domain/phone.ts";
 import type { CourseContent } from "../site-content.ts";
 import {
   faqSchema,
@@ -68,3 +69,26 @@ export function removedCourseImages(
   const kept = keys(after);
   return [...keys(before)].filter((key) => !kept.has(key));
 }
+
+/**
+ * Formulário "Quero ser avisada" da página do curso. O campo `website` fica
+ * escondido: pessoas não o veem, mas robôs costumam preenchê-lo.
+ */
+export const courseLeadSchema = z.object({
+  name: z
+    .string({ error: "Informe o seu nome." })
+    .trim()
+    .min(2, "Informe o seu nome.")
+    .max(80, "Nome muito longo."),
+  phone: z
+    .string({ error: "Informe o seu WhatsApp." })
+    .trim()
+    .max(30)
+    .refine(isValidPhone, "Informe um WhatsApp válido com DDD."),
+  city: z.string().trim().max(60, "Cidade muito longa.").default(""),
+  message: z.string().trim().max(300, "Mensagem muito longa.").default(""),
+  consent: z.literal(true, {
+    error: "Marque a autorização para a Thaise entrar em contato.",
+  }),
+  website: z.string().max(200).default(""),
+});

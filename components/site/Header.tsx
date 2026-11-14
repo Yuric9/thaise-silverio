@@ -19,6 +19,7 @@ export default function Header({
   showFaq = false,
   base = "",
   course = "section",
+  booking = false,
 }: {
   showFaq?: boolean;
   /** "/" em páginas que não são a inicial: os links viram "/#sobre" etc. */
@@ -30,6 +31,8 @@ export default function Header({
    * - "current": já estamos na página do curso, volta ao topo dela.
    */
   course?: "section" | "new-tab" | "current";
+  /** Agendamento pelo site ligado: "Agendar avaliação" abre /agendar. */
+  booking?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   // "Dúvidas" só entra no menu quando há perguntas frequentes no site.
@@ -106,7 +109,7 @@ export default function Header({
         </nav>
         <a
           className="header-cta"
-          href={`${base}#contato`}
+          href={booking ? "/agendar" : `${base}#contato`}
           onClick={() => setOpen(false)}
         >
           Agendar avaliação <span aria-hidden="true">↗</span>

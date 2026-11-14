@@ -87,6 +87,8 @@ export async function createAppointment(
     date: string;
     time: string;
     note: string;
+    /** "site" quando a própria cliente pediu pelo site. */
+    source?: "painel" | "site";
   },
 ) {
   const selected = await loadServices(db, input.serviceIds);
@@ -158,6 +160,7 @@ export async function createAppointment(
         ]
           .filter(Boolean)
           .join(" · "),
+        source: input.source ?? "painel",
         createdAt: now,
       })
       .returning();

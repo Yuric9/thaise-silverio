@@ -43,4 +43,6 @@ export type Dashboard = {
   recurring: RecurringExpense[];
   daysSinceLastExpense: number | null;
   pendingOrders: number;
+  newLeads: number;
+  siteRequests: number;
 };

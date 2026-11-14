@@ -97,6 +97,16 @@ export type CourseContent = {
   cover: CourseCover | null;
 };
 
+/**
+ * Agendamento pelo site (/agendar). Começa desligado: antes, a Thaise ajusta o
+ * horário de atendimento e a duração de cada procedimento no painel.
+ */
+export type BookingSettings = {
+  enabled: boolean;
+  /** Até quantos dias à frente a cliente pode pedir horário. */
+  maxDaysAhead: number;
+};
+
 export type SiteContent = {
   contact: ContactContent;
   highlights: Highlight[];
@@ -104,6 +114,7 @@ export type SiteContent = {
   /** Vazio = a seção "Perguntas frequentes" não aparece no site. */
   faq: FaqItem[];
   course: CourseContent;
+  booking: BookingSettings;
 };
 
 export const DEFAULT_SITE_CONTENT: SiteContent = {
@@ -164,6 +175,7 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     photos: [],
     cover: null,
   },
+  booking: { enabled: false, maxDaysAhead: 60 },
 };
 
 export const SITE_CONTENT_KEYS = [
@@ -172,6 +184,7 @@ export const SITE_CONTENT_KEYS = [
   "texts",
   "faq",
   "course",
+  "booking",
 ] as const;
 
 /**

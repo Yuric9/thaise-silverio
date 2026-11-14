@@ -44,3 +44,32 @@ export function isMaintenanceDue(
     daysSinceVisit <= MAINTENANCE_TO_DAYS
   );
 }
+
+/** O mínimo de uma cliente para saber se ela está no retoque ou na manutenção. */
+export type TouchUpClient = {
+  email: string;
+  lastStatus: string | null;
+  lastService: string | null;
+  lastVisit: string | null;
+  daysSinceLastVisit: number | null;
+};
+
+/** Em qual lembrete a cliente está agora (ou `null`). */
+export function touchUpPhase(
+  client: TouchUpClient,
+  services: { name: string; touchUpDays: number }[],
+): "retoque" | "manutencao" | null {
+  if (client.lastStatus !== "Finalizado") return null;
+  const days = touchUpDaysFor(client.lastService, services);
+  if (isTouchUpDue(client.daysSinceLastVisit, days)) return "retoque";
+  if (isMaintenanceDue(client.daysSinceLastVisit, days)) return "manutencao";
+  return null;
+}
+
+/**
+ * Chave que marca "mensagem enviada" no remarketing: uma por campanha, cliente
+ * e último atendimento (um atendimento novo começa um ciclo novo).
+ */
+export function campaignContactKey(campaign: string, client: TouchUpClient) {
+  return `${campaign}-${client.email}-${client.lastVisit ?? "novo"}`;
+}

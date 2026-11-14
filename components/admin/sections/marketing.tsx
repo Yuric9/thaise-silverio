@@ -11,11 +11,7 @@ import type {
 import { useAction } from "../../../lib/client/use-action";
 import { formatDate, todayKey } from "../../../lib/domain/dates";
 import { whatsappLink } from "../../../lib/domain/phone";
-import {
-  isMaintenanceDue,
-  isTouchUpDue,
-  touchUpDaysFor,
-} from "../../../lib/domain/touch-up";
+import { campaignContactKey, touchUpPhase } from "../../../lib/domain/touch-up";
 import {
   DEFAULT_SITE_CONTENT,
   type SiteContent,
@@ -120,7 +116,12 @@ export default function MarketingSection() {
       DEFAULT_SITE_CONTENT.contact.instagramHandle,
     site.data?.content.contact.googleReviewUrl ?? "",
   );
-  const [campaign, setCampaign] = useState<Campaign>("pos");
+  // `/admin#remarketing/retoque` abre direto numa campanha (ex.: vindo do Início).
+  const [campaign, setCampaign] = useState<Campaign>(() => {
+    const wanted =
+      typeof window === "undefined" ? "" : window.location.hash.split("/")[1];
+    return wanted && wanted in CAMPAIGNS ? (wanted as Campaign) : "pos";
+  });
   const [inactiveDays, setInactiveDays] = useState(30);
   const today = todayKey();
 
@@ -136,20 +137,10 @@ export default function MarketingSection() {
           client.daysSinceLastVisit <= 7,
       ),
       retoque: all.filter(
-        (client) =>
-          client.lastStatus === "Finalizado" &&
-          isTouchUpDue(
-            client.daysSinceLastVisit,
-            touchUpDaysFor(client.lastService, serviceList),
-          ),
+        (client) => touchUpPhase(client, serviceList) === "retoque",
       ),
       manutencao: all.filter(
-        (client) =>
-          client.lastStatus === "Finalizado" &&
-          isMaintenanceDue(
-            client.daysSinceLastVisit,
-            touchUpDaysFor(client.lastService, serviceList),
-          ),
+        (client) => touchUpPhase(client, serviceList) === "manutencao",
       ),
       retorno: all
         .filter(
@@ -250,7 +241,7 @@ export default function MarketingSection() {
               {list.length ? (
                 <ul className="card-grid">
                   {list.map((client) => {
-                    const key = `${campaign}-${client.email}-${client.lastVisit ?? "novo"}`;
+                    const key = campaignContactKey(campaign, client);
                     return (
                       <CampaignCard
                         key={key}

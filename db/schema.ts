@@ -91,6 +91,10 @@ export const services = sqliteTable("services", {
   sortOrder: integer("sort_order").notNull().default(0),
   /** Dias até o retoque (0 = não tem retoque). Usado no remarketing. */
   touchUpDays: integer("touch_up_days").notNull().default(0),
+  /** Aparece na lista do agendamento pelo site (/agendar). */
+  onlineBooking: integer("online_booking", { mode: "boolean" })
+    .notNull()
+    .default(true),
 });
 
 export const products = sqliteTable("products", {
@@ -124,6 +128,8 @@ export const appointments = sqliteTable("appointments", {
   totalCents: integer("total_cents").notNull(),
   paymentMethod: text("payment_method").notNull().default(""),
   cashTransactionId: integer("cash_transaction_id"),
+  /** De onde veio o agendamento: "painel" ou "site" (pedido da cliente). */
+  source: text("source").notNull().default("painel"),
   createdAt: text("created_at").notNull(),
 });
 
@@ -256,4 +262,22 @@ export const galleryItems = sqliteTable("gallery_items", {
   sortOrder: integer("sort_order").notNull().default(0),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
   createdAt: text("created_at").notNull(),
+});
+
+// ─── Curso ───────────────────────────────────────────────────────────────────
+
+/**
+ * Interessadas no curso: enviadas pelo formulário da página /curso, com
+ * consentimento para contato pelo WhatsApp. Podem ser apagadas no painel.
+ */
+export const courseLeads = sqliteTable("course_leads", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  phone: text("phone").notNull(),
+  city: text("city").notNull().default(""),
+  message: text("message").notNull().default(""),
+  /** "Nova" ou "Contatada". */
+  status: text("status").notNull().default("Nova"),
+  createdAt: text("created_at").notNull(),
+  contactedAt: text("contacted_at").notNull().default(""),
 });

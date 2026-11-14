@@ -22,6 +22,7 @@ export default async function Home() {
       <Header
         showFaq={faq.length > 0}
         course={content.course.published ? "new-tab" : "section"}
+        booking={content.booking.enabled}
       />
       <main>
         <Hero text={texts.heroText} />
@@ -38,7 +39,11 @@ export default async function Home() {
           coursePublished={content.course.published}
         />
         <Faq items={faq} />
-        <Contact contact={contact} text={texts.contactText} />
+        <Contact
+          contact={contact}
+          text={texts.contactText}
+          booking={content.booking.enabled}
+        />
       </main>
       <Footer contact={contact} />
       <StructuredData contact={contact} />
