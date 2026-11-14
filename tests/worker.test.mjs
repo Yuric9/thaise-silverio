@@ -122,3 +122,42 @@ test("a página do curso não existe enquanto não for publicada", async () => {
   ).text();
   assert.doesNotMatch(home, /href="\/curso"/);
 });
+
+test("agendamento pelo site começa desligado", async () => {
+  const page = await request("/agendar", { headers: { accept: "text/html" } });
+  assert.equal(page.status, 404);
+  const home = await (
+    await request("/", { headers: { accept: "text/html" } })
+  ).text();
+  assert.doesNotMatch(home, /href="\/agendar"/);
+});
+
+test("formulários públicos recusam envios de outros sites", async () => {
+  for (const path of ["/api/course-leads", "/api/booking"]) {
+    const response = await request(path, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://site-estranho.example",
+      },
+      body: "{}",
+    });
+    assert.equal(response.status, 403, path);
+  }
+});
+
+test("formulários públicos validam os dados antes de tudo", async () => {
+  for (const path of ["/api/course-leads", "/api/booking"]) {
+    const response = await request(path, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name: "A" }),
+    });
+    assert.equal(response.status, 400, path);
+  }
+});
+
+test("lista de interessadas exige login para ver", async () => {
+  const response = await request("/api/course-leads");
+  assert.equal(response.status, 401);
+});

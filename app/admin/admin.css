@@ -3020,3 +3020,8 @@ body:has(.admin-scope) {
   font-style: italic;
   color: var(--text-muted, #6b6b6b);
 }
+
+/* Configurações: agendamento pelo site, abaixo do horário */
+.admin-scope .booking-settings {
+  margin-top: var(--space-4, 24px);
+}

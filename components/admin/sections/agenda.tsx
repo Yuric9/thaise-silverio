@@ -13,7 +13,7 @@ import { AppointmentStatus } from "../status";
 import { useFeedback } from "../../ui/feedback-provider";
 import { Button, IconButton } from "../../ui/button";
 import { AsyncContent, EmptyState } from "../../ui/feedback";
-import { Avatar, PageHeader, Tabs } from "../../ui/layout";
+import { Avatar, Badge, PageHeader, Tabs } from "../../ui/layout";
 
 type View = "dia" | "semana";
 type StatusFilter =
@@ -252,6 +252,9 @@ function AppointmentRow({
           <Avatar name={appointment.clientName} size="sm" />
           <strong>{appointment.clientName}</strong>
           <AppointmentStatus status={appointment.status} />
+          {appointment.source === "site" && (
+            <Badge tone="info">Pelo site</Badge>
+          )}
         </div>
         <p className="appointment__services">
           {appointment.serviceName} ·{" "}

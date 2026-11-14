@@ -1,6 +1,6 @@
-import { eq, gte, isNotNull, max } from "drizzle-orm";
+import { and, eq, gte, isNotNull, max } from "drizzle-orm";
 import { getDb } from "../../../db";
-import { courseLeads, productOrders } from "../../../db/schema";
+import { appointments, courseLeads, productOrders } from "../../../db/schema";
 import { recurringExpenses, transactions } from "../../../db/schema";
 import {
   daysBetween,
@@ -28,31 +28,48 @@ export const GET = adminRoute(async () => {
   const weekStart = startOfWeek(today);
   const since = [previousMonthStart, weekStart].sort()[0];
 
-  const [rows, lastExpense, recurring, launched, pendingOrders, newLeads] =
-    await Promise.all([
-      db.select().from(transactions).where(gte(transactions.date, since)),
-      // Último gasto de todos os tempos (pode ser anterior ao período carregado).
-      db
-        .select({ date: max(transactions.date) })
-        .from(transactions)
-        .where(eq(transactions.kind, "despesa")),
-      db.select().from(recurringExpenses),
-      db
-        .select({
-          recurringExpenseId: transactions.recurringExpenseId,
-          date: transactions.date,
-        })
-        .from(transactions)
-        .where(isNotNull(transactions.recurringExpenseId)),
-      db
-        .select({ id: productOrders.id })
-        .from(productOrders)
-        .where(eq(productOrders.status, "Pendente")),
-      db
-        .select({ id: courseLeads.id })
-        .from(courseLeads)
-        .where(eq(courseLeads.status, "Nova")),
-    ]);
+  const [
+    rows,
+    lastExpense,
+    recurring,
+    launched,
+    pendingOrders,
+    newLeads,
+    siteRequests,
+  ] = await Promise.all([
+    db.select().from(transactions).where(gte(transactions.date, since)),
+    // Último gasto de todos os tempos (pode ser anterior ao período carregado).
+    db
+      .select({ date: max(transactions.date) })
+      .from(transactions)
+      .where(eq(transactions.kind, "despesa")),
+    db.select().from(recurringExpenses),
+    db
+      .select({
+        recurringExpenseId: transactions.recurringExpenseId,
+        date: transactions.date,
+      })
+      .from(transactions)
+      .where(isNotNull(transactions.recurringExpenseId)),
+    db
+      .select({ id: productOrders.id })
+      .from(productOrders)
+      .where(eq(productOrders.status, "Pendente")),
+    db
+      .select({ id: courseLeads.id })
+      .from(courseLeads)
+      .where(eq(courseLeads.status, "Nova")),
+    db
+      .select({ id: appointments.id })
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.source, "site"),
+          eq(appointments.status, "Pendente"),
+          gte(appointments.date, today),
+        ),
+      ),
+  ]);
 
   const month = periodStats(rows, monthStart, today);
   const previousMonth = periodStats(rows, previousMonthStart, previousSameDay);
@@ -75,5 +92,6 @@ export const GET = adminRoute(async () => {
       : null,
     pendingOrders: pendingOrders.length,
     newLeads: newLeads.length,
+    siteRequests: siteRequests.length,
   });
 });

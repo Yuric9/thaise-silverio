@@ -122,6 +122,33 @@ apply DB --remote`) antes do `wrangler deploy`. Veja o README.
 - Cada seção só aparece quando preenchida. Não invente preço, carga horária,
   certificado ou conteúdo do curso: isso é a Thaise quem informa.
 
+## Agendamento pelo site (/agendar)
+
+- Liga/desliga em /admin → Configurações (chave `booking` do conteúdo);
+  começa **desligado**. Desligado, `/agendar` dá 404 e "Agendar avaliação"
+  continua indo para o contato. Regras em `lib/server/booking.ts`.
+- Só procedimentos ativos, visíveis no site e com "Aceita agendamento pelo
+  site" (`services.online_booking`; curso e "outros" vêm desligados).
+- O pedido vira agendamento "Pendente" com `source = "site"` (etiqueta "Pelo
+  site" na Agenda) e reserva o horário; cancelar libera.
+- Formulário público: nunca altera cliente já cadastrada (o nome digitado vai
+  na observação); no máximo 2 pedidos pendentes por WhatsApp e 5 envios por
+  hora por IP; campo escondido `website` pega robôs; consentimento obrigatório.
+
+## Interessadas no curso
+
+- Formulário "Quero ser avisada" na página /curso → tabela `course_leads` →
+  /admin → Interessadas (chamar no WhatsApp, marcar contatada, apagar).
+- Rotas públicas usam `publicRoute` (`lib/server/http.ts`) e
+  `publicFormLimit` (`lib/server/rate-limit.ts`).
+
+## Lembretes na tela Início
+
+- Pedidos de horário pelo site, interessadas novas e clientes na época do
+  retoque/manutenção ainda sem mensagem (mesma regra do Remarketing:
+  `touchUpPhase` e `campaignContactKey` em `lib/domain/touch-up.ts`).
+  "Ver lista" abre `/admin#remarketing/retoque`.
+
 ## Efeitos do site
 
 - `components/site/Effects.tsx` (no layout do site): seções surgem ao rolar,

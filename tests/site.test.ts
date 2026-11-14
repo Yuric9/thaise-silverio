@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { counterText, parseCounter } from "../lib/domain/counter.ts";
-import { courseSchema, removedCourseImages } from "../lib/server/course.ts";
+import {
+  courseLeadSchema,
+  courseSchema,
+  removedCourseImages,
+} from "../lib/server/course.ts";
 import {
   campaignContactKey,
   isMaintenanceDue,
@@ -201,5 +205,18 @@ test("lembrete de retoque: em que fase a cliente está", () => {
   assert.equal(
     campaignContactKey("retoque", client(28)),
     "retoque-ana@cliente-2026-10-01",
+  );
+});
+
+test("interessadas no curso: precisa de autorização e WhatsApp válido", () => {
+  const base = { name: "Ana Souza", phone: "(62) 98123-4567", consent: true };
+  assert.ok(courseLeadSchema.safeParse(base).success);
+  assert.ok(!courseLeadSchema.safeParse({ ...base, consent: false }).success);
+  assert.ok(!courseLeadSchema.safeParse({ ...base, phone: "1234" }).success);
+  assert.ok(!courseLeadSchema.safeParse({ ...base, name: "A" }).success);
+  // Campo escondido (robôs) é aceito na validação e tratado na rota.
+  assert.equal(
+    courseLeadSchema.parse({ ...base, website: "spam" }).website,
+    "spam",
   );
 });

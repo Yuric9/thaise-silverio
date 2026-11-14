@@ -1264,3 +1264,120 @@ body:has(.site-scope) {
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Página de agendamento (/agendar) ──────────────────────────────────── */
+.site-scope .booking-page {
+  background: var(--cream);
+  min-height: 70vh;
+}
+.site-scope .booking-page h1 {
+  font:
+    400 clamp(36px, 5vw, 56px) / 1.08 Georgia,
+    serif;
+  color: var(--primary-deep);
+  margin: 12px 0 0;
+}
+.site-scope .booking-page h1 em {
+  color: var(--rose);
+}
+.site-scope .booking-page .section-heading p {
+  max-width: 380px;
+}
+.site-scope .booking-form {
+  max-width: 820px;
+}
+.site-scope .booking-step {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 12px;
+}
+.site-scope .booking-step legend {
+  padding: 0;
+  margin-bottom: 12px;
+  font:
+    400 22px/1.2 Georgia,
+    serif;
+  color: var(--primary-deep);
+}
+.site-scope .booking-hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+.site-scope .booking-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.site-scope .booking-option,
+.site-scope .booking-time {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(110, 48, 73, 0.2);
+  background: var(--cream);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+.site-scope .booking-option input,
+.site-scope .booking-time input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .site-scope .booking-option:hover,
+  .site-scope .booking-time:hover {
+    border-color: var(--primary);
+  }
+}
+.site-scope .booking-option.is-selected,
+.site-scope .booking-time.is-selected {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.site-scope .booking-option:has(input:focus-visible),
+.site-scope .booking-time:has(input:focus-visible) {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.site-scope .booking-option__name {
+  font:
+    400 17px/1.3 Georgia,
+    serif;
+  color: var(--primary-deep);
+}
+.site-scope .booking-option__meta {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.site-scope .booking-date {
+  max-width: 260px;
+}
+.site-scope .booking-times {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+}
+.site-scope .booking-time {
+  place-items: center;
+  padding: 10px 8px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.site-scope .booking-done {
+  display: grid;
+  gap: 12px;
+}
+.site-scope .booking-done p {
+  margin: 0;
+}
+.site-scope .booking-done .button {
+  justify-self: start;
+}

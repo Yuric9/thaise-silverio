@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { addDays, formatLongDate, todayKey } from "@/lib/domain/dates";
 import { formatMoney } from "@/lib/domain/money";
 import { whatsappLink } from "@/lib/site-content";
@@ -58,23 +58,34 @@ export default function BookingForm({
       .catch((failure: Error) => setError(failure.message));
   }, []);
 
-  // Busca os horários livres quando o procedimento e o dia estão escolhidos.
-  useEffect(() => {
-    if (!serviceId || !date) return;
-    let current = true;
-    setLoadingTimes(true);
-    setError("");
-    setTimes(null);
+  // Busca os horários livres quando a cliente escolhe o procedimento ou o dia.
+  // A última escolha vence: respostas antigas que chegam depois são ignoradas.
+  const request = useRef(0);
+  async function loadTimes(nextService: number | null, nextDate: string) {
     setTime("");
-    fetch(`/api/booking/availability?serviceId=${serviceId}&date=${date}`)
-      .then((response) => readJson<{ times: string[] }>(response))
-      .then((data) => current && setTimes(data.times))
-      .catch((failure: Error) => current && setError(failure.message))
-      .finally(() => current && setLoadingTimes(false));
-    return () => {
-      current = false;
-    };
-  }, [serviceId, date]);
+    setTimes(null);
+    setError("");
+    if (!nextService || !nextDate) return;
+    const id = ++request.current;
+    setLoadingTimes(true);
+    try {
+      const data = await readJson<{ times: string[] }>(
+        await fetch(
+          `/api/booking/availability?serviceId=${nextService}&date=${nextDate}`,
+        ),
+      );
+      if (id === request.current) setTimes(data.times);
+    } catch (failure) {
+      if (id === request.current)
+        setError(
+          failure instanceof Error
+            ? failure.message
+            : "Não foi possível carregar.",
+        );
+    } finally {
+      if (id === request.current) setLoadingTimes(false);
+    }
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -167,7 +178,10 @@ export default function BookingForm({
                   name="service"
                   value={item.id}
                   checked={serviceId === item.id}
-                  onChange={() => setServiceId(item.id)}
+                  onChange={() => {
+                    setServiceId(item.id);
+                    void loadTimes(item.id, date);
+                  }}
                 />
                 <span className="booking-option__name">{item.name}</span>
                 <span className="booking-option__meta">
@@ -191,7 +205,10 @@ export default function BookingForm({
               min={today}
               max={addDays(today, maxDays)}
               value={date}
-              onChange={(event) => setDate(event.target.value)}
+              onChange={(event) => {
+                setDate(event.target.value);
+                void loadTimes(serviceId, event.target.value);
+              }}
             />
           </label>
           {date && <p className="booking-hint">{formatLongDate(date)}</p>}

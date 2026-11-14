@@ -16,6 +16,7 @@ import { appointments, profiles, services } from "../../db/schema";
 import { addDays, todayKey } from "../domain/dates";
 import {
   clientEmailForPhone,
+  formatPhone,
   isValidPhone,
   phoneDigits,
 } from "../domain/phone";
@@ -150,7 +151,7 @@ export async function requestBooking(
     existing && existing.name !== input.name
       ? `nome informado: ${input.name}`
       : "",
-    `WhatsApp: ${input.phone}`,
+    `WhatsApp: ${formatPhone(input.phone)}`,
     input.note ? `obs.: ${input.note}` : "",
   ]
     .filter(Boolean)

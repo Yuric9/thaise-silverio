@@ -143,6 +143,26 @@ export default function DashboardSection({ navigate }: SectionProps) {
                 </p>
               )}
 
+              {data.siteRequests > 0 && (
+                <p className="notice">
+                  <strong>
+                    {plural(
+                      data.siteRequests,
+                      "pedido de horário",
+                      "pedidos de horário",
+                    )}
+                  </strong>{" "}
+                  pelo site aguardando confirmação.{" "}
+                  <button
+                    type="button"
+                    className="link-button"
+                    onClick={() => navigate("agenda")}
+                  >
+                    Ver agenda
+                  </button>
+                </p>
+              )}
+
               {data.newLeads > 0 && (
                 <p className="notice">
                   {plural(

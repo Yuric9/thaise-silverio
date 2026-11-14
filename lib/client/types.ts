@@ -44,4 +44,5 @@ export type Dashboard = {
   daysSinceLastExpense: number | null;
   pendingOrders: number;
   newLeads: number;
+  siteRequests: number;
 };
